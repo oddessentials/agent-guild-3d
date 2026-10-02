@@ -101,7 +101,7 @@ try {
   if (expectedVersion !== null) check(health.version === expectedVersion, 'the manager is the expected version', expectedVersion);
 
   const assets = ['/', '/app.js', '/theme.js', '/styles.css', '/skins/guild/skin.css', '/skins/guild/page.avif', '/skins/professional/skin.css', '/skins/orbital/skin.css', '/vendor/xterm/xterm.js', '/vendor/xterm/xterm.css',
-    '/vendor/xterm/addon-fit.js', '/vendor/xterm/addon-web-links.js'];
+    '/vendor/xterm/addon-fit.js', '/vendor/xterm/addon-web-links.js', '/yard.css', '/yard.js', '/yard-layout.mjs', '/yard/court.webp'];
   for (const asset of assets) {
     const res = await fetch(`${base}${asset}`);
     const bytes = (await res.arrayBuffer()).byteLength;

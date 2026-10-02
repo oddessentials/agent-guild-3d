@@ -22,6 +22,10 @@
     theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   if (!skins.some(function (s) { return s.id === skin; })) skin = skins[0].id;
+  var view = null;
+  try { view = localStorage.getItem('agentGuild.view'); } catch (e) { /* storage unavailable */ }
+  if (view !== 'cards' && view !== 'yard') view = 'cards';
   document.documentElement.dataset.theme = theme;
   document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.view = view;
 })();

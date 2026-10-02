@@ -107,6 +107,13 @@ of gentle nature spirits. The page
 follows your system's light or dark setting until you pick one. See
 [docs/SKINS.md](docs/SKINS.md) to make another.
 
+**Yard.** The View control in the top bar switches between the card page and
+an isometric guild yard, without a reload. Halls are the tools and heroes are
+the sessions. Working heroes pace, and the agents they summon stand with
+them. Every command is the one on the card: new, existing, install, the
+terminal, news and GitHub. The choice is remembered on this browser. Skins
+and light or dark mode still apply to the frame around the yard.
+
 ## Commands
 
 | Command | What it does |
