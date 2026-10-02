@@ -518,6 +518,10 @@ function renderReportingSetup(card, provider) {
   };
 }
 
+function syncViews() {
+  document.dispatchEvent(new CustomEvent('agentguild:sync'));
+}
+
 let dealt = false;
 
 function renderProviders() {
@@ -569,6 +573,7 @@ function renderProviders() {
     dealt = true;
     if (!reducedMotion.matches) list.classList.add('deal');
   }
+  syncViews();
 }
 
 const openCopies = new Set();
@@ -706,6 +711,7 @@ async function loadUsage() {
     renderAccounts(card, provider);
     renderUsage(card, provider);
   }
+  syncViews();
 }
 
 const ARTIFICIAL_ANALYSIS = 'Artificial Analysis';
@@ -2659,6 +2665,7 @@ function renderSessions() {
   if (state.activeId) updatePanel();
   if ($('history').open) renderHistory();
   if (state.stats && sessions.some((s) => s.model && state.statsFor.get(s.id) !== modelKey(s))) scheduleStats();
+  syncViews();
 }
 
 function confirmLeaving(event) {

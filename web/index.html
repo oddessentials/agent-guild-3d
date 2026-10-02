@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/skins/professional/skin.css">
   <link rel="stylesheet" href="/skins/orbital/skin.css">
   <link rel="stylesheet" href="/skins/grove/skin.css">
+  <link rel="stylesheet" href="/yard.css">
 </head>
 <body>
   <header class="topbar">
@@ -27,6 +28,10 @@
       </div>
       <span id="upgrade-note" class="upgrade-note" hidden></span>
       <button id="upgrade" class="btn upgrade" type="button" hidden></button>
+      <div class="view-switch" role="group" aria-label="View">
+        <button id="view-cards" class="btn view-btn" type="button" aria-pressed="true">Cards</button>
+        <button id="view-yard" class="btn view-btn" type="button" aria-pressed="false">Yard</button>
+      </div>
       <button id="appearance" class="btn appearance" type="button" popovertarget="appearance-menu" aria-haspopup="dialog">Appearance</button>
       <div id="appearance-menu" class="appearance-menu" popover role="dialog" aria-label="Appearance">
         <fieldset id="skin-choices"><legend>Skin</legend></fieldset>
@@ -42,6 +47,34 @@
   </header>
 
   <main id="app" hidden>
+    <div id="yard" class="yard">
+      <div id="yard-stage" class="yard-stage" tabindex="0" role="application" aria-label="Guild yard. Drag to pan, scroll to zoom.">
+        <div id="yard-cam" class="yard-cam">
+          <div id="yard-world" class="yard-world">
+            <img id="yard-plate" class="yard-plate" alt="" src="/yard/court.webp" draggable="false">
+            <div id="yard-plots"></div>
+            <div id="yard-units"></div>
+          </div>
+        </div>
+      </div>
+      <aside id="yard-hud" class="yard-hud" aria-live="polite">
+        <div id="yard-portrait" class="yard-portrait"></div>
+        <p id="yard-kicker" class="yard-kicker"></p>
+        <h2 id="yard-title"></h2>
+        <p id="yard-sub" class="yard-sub"></p>
+        <div id="yard-accounts" class="yard-accounts"></div>
+        <div id="yard-meters" class="yard-meters"></div>
+        <div id="yard-actions" class="yard-actions"></div>
+        <div id="yard-note" class="yard-note"></div>
+        <p class="yard-help">Drag to pan. Scroll to zoom. Arrows select. Enter uses the highlighted command. Double-click a hero to open the terminal.</p>
+      </aside>
+      <div id="yard-ticker" class="yard-ticker">
+        <button id="yard-news" class="btn" type="button">All news</button>
+        <span id="yard-count" class="yard-count"></span>
+        <div id="yard-headlines" class="yard-headlines"></div>
+      </div>
+    </div>
+
     <section class="launcher" aria-labelledby="launch-heading">
       <div class="section-head">
         <h2 id="launch-heading">Start a session</h2>
@@ -370,5 +403,6 @@
   <script src="/vendor/xterm/addon-fit.js"></script>
   <script src="/vendor/xterm/addon-web-links.js"></script>
   <script type="module" src="/app.js"></script>
+  <script type="module" src="/yard.js"></script>
 </body>
 </html>

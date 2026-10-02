@@ -72,6 +72,11 @@ code, pre { font-family: var(--font-mono); }
   background: var(--accent); box-shadow: 0 0 0 2px var(--surface);
 }
 .topbar-end { display: flex; align-items: center; justify-content: flex-end; gap: 14px; flex-wrap: wrap; min-width: 0; }
+.view-switch { display: flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; flex: none; }
+.view-switch .btn { border: 0; border-radius: 0; background: transparent; }
+:root:not([data-view="yard"]) #view-cards,
+:root[data-view="yard"] #view-yard { background: var(--accent-fill); color: var(--accent-text); }
+#yard { display: none; }
 .connection { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.85rem; }
 .connection .dot { --dot: var(--warn); width: 8px; height: 8px; border-radius: 50%; background: var(--dot); }
 .connection.ok .dot { --dot: var(--ok); }

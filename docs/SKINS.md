@@ -3,7 +3,8 @@
 A skin is the page's art and design styling, in a light and a dark variant.
 The Appearance menu in the top bar switches skin and variant in place. A skin
 changes how the page looks and nothing else: layout, controls, labels and
-behaviour stay the same.
+behaviour stay the same. The Yard view (`web/yard.js`) is a separate layout,
+not a skin. Its frame uses the same colour tokens.
 
 The skins are `web/skins/guild/` (the default), `web/skins/professional/`, `web/skins/orbital/` and `web/skins/grove/`.
 Copy the closer one to start a new skin.

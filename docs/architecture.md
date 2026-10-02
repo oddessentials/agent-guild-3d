@@ -62,7 +62,10 @@
 * **API server** (`server.mjs`). REST for control, one WebSocket for
   lifecycle events, one WebSocket per attached terminal. See [api.md](api.md).
 * **Web page** (`web/`). Plain HTML, CSS and JavaScript with xterm.js, served
-  by the manager. No build step.
+  by the manager. No build step. The card page is the default. The yard view
+  (`web/yard.js`) is a second presentation of the same objects: each provider
+  is a hall on an isometric courtyard and each session is a hero. It invokes
+  the card controls, so there is one copy of the behaviour.
 * **Launcher** (`bin/agent-guild.mjs`). Starts, stops, restarts and opens.
   Starting a detached manager lives in `launch.mjs`, which the manager also
   uses to start its successor on a restart.

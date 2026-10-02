@@ -1,0 +1,376 @@
+/* Isometric guild yard. A second layout, not a skin: the card page stays in the DOM
+   and the yard invokes its controls. Colour tokens still come from the active skin. */
+
+:root[data-view="yard"] #yard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+  grid-template-rows: minmax(0, 1fr) auto;
+  height: 100%;
+}
+
+:root[data-view="yard"] main#app {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  height: calc(100vh - var(--topbar-h, 56px));
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+
+:root[data-view="yard"] section.sessions,
+:root[data-view="yard"] section.news,
+:root[data-view="yard"] #providers {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:root[data-view="yard"] .launcher {
+  position: absolute;
+  z-index: 6;
+  top: 10px;
+  left: 12px;
+  right: 332px;
+  margin: 0;
+}
+
+:root[data-view="yard"] .launcher > .section-head {
+  margin: 0;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+}
+
+:root[data-view="yard"] .launcher > .section-head h2 { display: none; }
+
+.yard-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.45) 100%),
+    #12151c;
+  cursor: grab;
+  outline: none;
+}
+
+.yard-stage:active { cursor: grabbing; }
+.yard-stage:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+
+.yard-cam {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(100%, 1280px);
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
+.yard-world { position: relative; width: 100%; }
+.yard-plate { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
+#yard-plots, #yard-units { position: absolute; inset: 0; }
+
+.plot {
+  position: absolute;
+  z-index: 2;
+  width: max-content;
+  max-width: 168px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transform: translate(-50%, -30%);
+}
+
+.plot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  width: 148px;
+  height: 128px;
+  transform: translateX(-50%);
+}
+
+.plot-glow {
+  position: absolute;
+  left: 50%;
+  bottom: 110px;
+  width: 90px;
+  height: 28px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 196, 92, 0.85), rgba(255, 196, 92, 0));
+  opacity: 0;
+  pointer-events: none;
+}
+
+.plot.working .plot-glow { opacity: 1; animation: yard-glow 1.6s ease-in-out infinite; }
+
+.plot-plate {
+  position: relative;
+  display: grid;
+  gap: 1px;
+  min-width: 92px;
+  padding: 4px 8px 5px;
+  border-radius: 8px;
+  background: color-mix(in srgb, #141820 82%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gold) 65%, transparent);
+  color: #f4ecd8;
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-display);
+}
+
+.plot-tool { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.01em; }
+.plot-state {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 0.68rem;
+  opacity: 0.82;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.plot-meter { display: block; height: 4px; margin-top: 3px; border-radius: 99px; background: rgba(255, 255, 255, 0.18); overflow: hidden; }
+.plot-meter > span { display: block; height: 100%; width: 0; background: #7dcea0; }
+.plot-meter.low > span { background: var(--warn); }
+.plot-meter.empty > span { background: var(--danger); }
+.plot.locked .plot-plate { filter: grayscale(0.65); }
+.plot.selected .plot-plate {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 70%, transparent), 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+.plot:focus-visible .plot-plate { outline: 2px solid var(--focus); outline-offset: 2px; }
+.plot.camp .plot-plate { border-style: dashed; }
+
+.unit {
+  position: absolute;
+  z-index: 3;
+  width: 72px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f4ecd8;
+  cursor: pointer;
+  transform: translate(-50%, -92%);
+}
+
+.unit .shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: 40px;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+}
+
+.unit.selected .shadow {
+  background: color-mix(in srgb, var(--gold) 70%, transparent);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.unit .sprite { display: block; width: 64px; height: 80px; margin: 0 auto; transform-origin: 50% 90%; pointer-events: none; }
+.unit .sprite svg { display: block; width: 100%; height: 100%; }
+.unit.working .sprite { animation: yard-work 1.05s ease-in-out infinite; }
+.unit.exited { opacity: 0.5; filter: grayscale(0.8); }
+
+.unit .level {
+  position: absolute;
+  top: 10px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 99px;
+  background: var(--gold);
+  color: var(--gold-ink);
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.unit .uname {
+  display: block;
+  max-width: 92px;
+  margin: -8px auto 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px #000, 0 0 6px #000;
+  pointer-events: none;
+}
+
+.unit .familiars { display: flex; justify-content: center; gap: 2px; min-height: 0; pointer-events: none; }
+.unit .familiar {
+  width: 16px;
+  height: 16px;
+  background: center / contain no-repeat;
+  filter: drop-shadow(0 1px 1px #000);
+}
+.unit .familiar.letter {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #1c2230;
+  color: #f4ecd8;
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+.unit .more {
+  position: absolute;
+  top: 10px;
+  left: -4px;
+  padding: 0 4px;
+  border-radius: 99px;
+  background: #141820;
+  color: #f4ecd8;
+  border: 1px solid var(--gold);
+  font-size: 0.62rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+.unit:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 8px; }
+
+.yard-hud {
+  grid-column: 2;
+  grid-row: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 14px 14px 12px;
+  background: color-mix(in srgb, var(--surface) 94%, #0c0e12);
+  border-left: 1px solid var(--border);
+  color: var(--text);
+}
+
+.yard-portrait {
+  width: 112px;
+  height: 136px;
+  margin: 0 auto 8px;
+  border-radius: 12px 12px 42px 42px;
+  border: 2px solid var(--gold);
+  background: #0c0d10;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.yard-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; display: block; }
+.yard-mono {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-family: var(--font-brand);
+  font-size: 2rem;
+  color: var(--gold);
+}
+
+.yard-kicker {
+  margin: 0;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.yard-hud h2 {
+  margin: 2px 0 4px;
+  text-align: center;
+  font-size: 1.15rem;
+}
+
+.yard-sub {
+  margin: 0 0 8px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.yard-accounts { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 8px; }
+.yard-meters { display: grid; gap: 6px; margin-bottom: 8px; }
+.yard-meters:empty, .yard-accounts:empty, .yard-actions:empty { display: none; }
+.yard-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+.yard-actions .btn { width: 100%; }
+.yard-note { display: grid; gap: 8px; color: var(--muted); font-size: 0.82rem; }
+.yard-note p { margin: 0; }
+.yard-cwd { font-family: var(--font-mono); font-size: 0.75rem; word-break: break-all; }
+.yard-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.yard-agents { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.yard-note .copies { font-size: 0.78rem; }
+.yard-help {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.yard-ticker {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.yard-count { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+.yard-headlines {
+  display: flex;
+  gap: 16px;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.82rem;
+}
+.yard-headlines .news-link { white-space: nowrap; }
+
+@keyframes yard-work {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px) rotate(-2deg); }
+}
+
+@keyframes yard-glow {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unit.working .sprite,
+  .plot.working .plot-glow { animation: none; }
+  .plot.working .plot-glow { opacity: 0.8; }
+}
+
+@media (max-width: 860px) {
+  :root[data-view="yard"] #yard {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(220px, 1fr) auto minmax(200px, 46%);
+  }
+  .yard-hud { grid-column: 1; grid-row: 3; border-left: 0; border-top: 1px solid var(--border); }
+  .yard-ticker { grid-row: 2; }
+  :root[data-view="yard"] .launcher { right: 12px; }
+}
