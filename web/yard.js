@@ -6,20 +6,7 @@ import { PLOTS, anchorForProvider, layoutUnits } from '/yard-layout.mjs';
 const $ = (id) => document.getElementById(id);
 const VIEW_KEY = 'agentGuild.view';
 const PORTRAITS = new Set(['anthropic', 'openai', 'google', 'xai', 'shell']);
-const COLORS = {
-  anthropic: '#d97757',
-  openai: '#10a37f',
-  google: '#4285f4',
-  xai: '#9aa3b2',
-  shell: '#8b5cf6',
-};
-const KINDS = {
-  anthropic: 'mage',
-  openai: 'knight',
-  google: 'scholar',
-  xai: 'star',
-  shell: 'smith',
-};
+const PLATE_ASPECT = 1792 / 1008;
 
 let selected = null;
 let hudSig = '';
@@ -58,6 +45,18 @@ function applyCam() {
   node.style.transform = `translate(calc(-50% + ${cam.x}px), calc(-50% + ${cam.y}px)) scale(${cam.s})`;
 }
 
+function fitCourt() {
+  const stage = $('yard-stage');
+  const node = $('yard-cam');
+  if (!stage || !node) return;
+  const sw = stage.clientWidth;
+  const sh = stage.clientHeight;
+  if (sw < 40 || sh < 40) return;
+  // Fill the stage, but never crop more than about 7% off any side, so the halls stay in frame.
+  const width = Math.min(sw / 0.82, (sh / 0.82) * PLATE_ASPECT);
+  node.style.width = `${Math.round(width)}px`;
+}
+
 function applyInert() {
   const yard = document.documentElement.dataset.view === 'yard';
   const providers = $('providers');
@@ -75,7 +74,10 @@ function setView(view) {
   $('view-cards')?.setAttribute('aria-pressed', String(next === 'cards'));
   $('view-yard')?.setAttribute('aria-pressed', String(next === 'yard'));
   applyInert();
-  if (next === 'yard') sync();
+  if (next === 'yard') {
+    sync();
+    requestAnimationFrame(fitCourt);
+  }
 }
 
 function pose(card, kind) {
@@ -284,19 +286,39 @@ function renderHud() {
   else fillSession(card);
 }
 
-function unitSvg(providerId) {
-  const kind = KINDS[providerId] || 'banner';
-  const color = COLORS[providerId] || '#e2b867';
-  const shadow = '<ellipse cx="32" cy="74" rx="14" ry="4.5" fill="rgba(0,0,0,.45)"/>';
-  const figures = {
-    mage: `${shadow}<path d="M32 18c8 0 12 8 12 14v6c4 2 8 8 8 16v14H12V54c0-8 4-14 8-16v-6c0-6 4-14 12-14z" fill="${color}"/><circle cx="32" cy="22" r="7" fill="#e6c2a0"/><path d="M20 16c2-8 20-8 24 0-6 2-18 2-24 0z" fill="${color}"/>`,
-    knight: `${shadow}<path d="M20 40h24l4 28H16z" fill="${color}"/><path d="M22 28h20v12H22z" fill="#2a2e33"/><circle cx="32" cy="26" r="8" fill="#d5d8de"/><rect x="28" y="22" width="8" height="3" fill="#1b1e22"/><path d="M44 46l10 4-8 16-6-4z" fill="#c5a46a"/>`,
-    scholar: `${shadow}<path d="M18 42h28l2 26H16z" fill="${color}"/><circle cx="32" cy="28" r="8" fill="#e6c2a0"/><path d="M16 24h32l-6 6H22z" fill="${color}"/><rect x="26" y="50" width="12" height="8" rx="1" fill="#f4ecd8"/>`,
-    star: `${shadow}<path d="M32 16l4 10h10l-8 6 3 10-9-6-9 6 3-10-8-6h10z" fill="#f4ecd8"/><path d="M18 40h28l3 28H15z" fill="${color}"/>`,
-    smith: `${shadow}<path d="M18 38h28l2 30H16z" fill="${color}"/><circle cx="32" cy="26" r="8" fill="#e6c2a0"/><path d="M40 48h14v4H40z" fill="#8a8175"/><rect x="50" y="42" width="6" height="10" fill="#c5a46a"/>`,
-    banner: `${shadow}<path d="M30 16h4v52h-4z" fill="#8a8175"/><path d="M34 18h18l-4 8 4 8H34z" fill="${color}"/>`,
-  };
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" aria-hidden="true">${figures[kind]}</svg>`;
+function figureUrl(providerId, poseName) {
+  const skin = safeToken(document.documentElement.dataset.skin) || 'guild';
+  const id = safeToken(providerId);
+  if (!id || !PORTRAITS.has(id)) return '';
+  if (skin === 'professional') return `/skins/professional/icons/${id}.svg`;
+  return `/skins/${skin}/characters/${id}/${poseName}.webp`;
+}
+
+function paintFigure(el, card) {
+  const providerId = card.dataset.provider || '';
+  const poseName = pose(card, 'unit');
+  const src = figureUrl(providerId, poseName);
+  const skin = safeToken(document.documentElement.dataset.skin) || 'guild';
+  const key = `${src}|${skin}`;
+  if (el.dataset.figure === key) return;
+  el.dataset.figure = key;
+  const fig = el.querySelector('.fig');
+  fig.replaceChildren();
+  el.classList.toggle('mark', !src || skin === 'professional');
+  if (!src) {
+    fig.append(monogramEl(card));
+    return;
+  }
+  const img = document.createElement('img');
+  img.alt = '';
+  img.src = src;
+  img.addEventListener('error', () => {
+    if (!img.isConnected) return;
+    img.remove();
+    el.classList.add('mark');
+    if (!fig.firstElementChild) fig.append(monogramEl(card));
+  });
+  fig.append(img);
 }
 
 function renderPlots() {
@@ -352,6 +374,8 @@ function renderPlots() {
       session.dataset.provider === id && session.querySelector('.status-pill')?.classList.contains('active')
     ));
     el.classList.toggle('working', busy);
+    const color = getComputedStyle(card).getPropertyValue('--pc').trim();
+    if (color) el.style.setProperty('--pc', color);
     el.title = card.getAttribute('aria-label') || '';
     el.setAttribute('aria-pressed', String(el.classList.contains('selected')));
   }
@@ -396,7 +420,7 @@ function renderUnits() {
       el.type = 'button';
       el.className = 'unit';
       el.dataset.id = card.dataset.id;
-      el.innerHTML = '<span class="shadow" aria-hidden="true"></span><span class="sprite" aria-hidden="true"></span><span class="level"></span><span class="uname"></span><span class="familiars"></span><span class="more" hidden></span>';
+      el.innerHTML = '<span class="ring" aria-hidden="true"></span><span class="fig" aria-hidden="true"></span><span class="plate"><span class="level"></span><span class="uname"></span><span class="pip" aria-hidden="true"></span><span class="more" hidden></span></span><span class="familiars"></span>';
       el.addEventListener('click', (event) => {
         event.stopPropagation();
         select({ kind: 'unit', id: el.dataset.id });
@@ -412,16 +436,15 @@ function renderUnits() {
     el.style.left = `${place.x}%`;
     el.style.top = `${place.y}%`;
     el.style.zIndex = String(200 + Math.round(place.y));
-    const providerId = card.dataset.provider || 'camp';
-    if (el.dataset.sprite !== providerId) {
-      el.dataset.sprite = providerId;
-      el.querySelector('.sprite').innerHTML = unitSvg(providerId);
-    }
+    paintFigure(el, card);
     const working = card.querySelector('.status-pill')?.classList.contains('active');
     el.classList.toggle('working', Boolean(working));
     el.classList.toggle('exited', card.classList.contains('exited'));
     el.classList.toggle('selected', selected?.kind === 'unit' && selected.id === card.dataset.id);
-    el.querySelector('.level').textContent = card.querySelector('.level-badge')?.textContent || '';
+    const level = el.querySelector('.level');
+    const levelText = (card.querySelector('.level-badge')?.textContent || '').trim();
+    level.textContent = levelText;
+    level.hidden = !levelText;
     el.querySelector('.uname').textContent = card.querySelector('.name')?.textContent || '';
     paintFamiliars(el.querySelector('.familiars'), card);
     const more = el.querySelector('.more');
@@ -577,4 +600,6 @@ new MutationObserver(() => {
 
 bindStage();
 applyCam();
+window.addEventListener('resize', fitCourt);
+if (window.ResizeObserver && $('yard-stage')) new ResizeObserver(fitCourt).observe($('yard-stage'));
 setView(document.documentElement.dataset.view === 'yard' ? 'yard' : 'cards');

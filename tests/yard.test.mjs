@@ -75,6 +75,15 @@ test('clone and upgrade sessions share the camp without stacking', () => {
   assert.notEqual(`${placed[0].x},${placed[0].y}`, `${placed[1].x},${placed[1].y}`);
 });
 
+test('heroes use the skin character art and stand on a ground ring', () => {
+  const yard = readFileSync(new URL('yard.js', web), 'utf8');
+  assert.match(yard, /\/characters\/\$\{id\}\//);
+  assert.match(yard, /\/skins\/professional\/icons\//);
+  assert.match(css, /\.unit \.ring/);
+  assert.match(css, /\.unit \.plate/);
+  assert.match(css, /prefers-reduced-motion:\s*reduce/);
+});
+
 test('a custom provider gets its own camp instead of a built-in hall', () => {
   const anchor = anchorForProvider('workshop', 1);
   assert.equal(anchor.camp, true);
