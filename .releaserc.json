@@ -1,0 +1,22 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    ["@semantic-release/commit-analyzer", {
+      "preset": "conventionalcommits",
+      "releaseRules": [
+        { "breaking": true, "release": "minor" },
+        { "type": "revert", "release": "patch" }
+      ]
+    }],
+    ["@semantic-release/release-notes-generator", {
+      "preset": "conventionalcommits",
+      "presetConfig": {
+        "commitUrlFormat": "https://github.com/oddessentials/agent-guild/commit/{{hash}}",
+        "compareUrlFormat": "https://github.com/oddessentials/agent-guild/compare/{{previousTag}}...{{currentTag}}",
+        "issueUrlFormat": "https://github.com/oddessentials/agent-guild/issues/{{id}}",
+        "userUrlFormat": "https://github.com/{{user}}"
+      }
+    }],
+    "./.github/release/capture.mjs"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "_style": "Premium stylized 3D render, cute collectible vinyl-toy look, glossy enamel and brushed metal physically based materials, soft key light with a strong colored rim light, single object isolated and centered with a generous empty margin, on a pure flat black background, no floor, no shadow, no text, no letters, no logos, no border.",
+  "familiars/flame": {
+    "seed": 601,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round helper drone robot with a glossy burnt-orange shell, one big glowing amber lens eye, two small side thrusters puffing orange flame, a stubby antenna, hovering playfully."
+  },
+  "familiars/leaf": {
+    "seed": 602,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round helper drone robot with a glossy emerald-green shell, one big glowing green lens eye, two small leaf-shaped rotor blades on top, hovering playfully, green light motes."
+  },
+  "familiars/night": {
+    "seed": 603,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round helper drone robot with a glossy deep violet crystal shell, one big glowing lavender lens eye, two small curved antenna horns, hovering playfully, violet sparkles."
+  },
+  "familiars/aether": {
+    "seed": 604,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round helper drone robot with a translucent glowing sky-blue glass shell full of tiny stars, one big glowing blue lens eye, a small halo ring orbiting it, hovering playfully."
+  },
+  "ui/empty-state": {
+    "seed": 801,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute chibi robot, clearly a machine and not a human: a round glossy white robot body, a big round dark glass dome head with two glowing cyan lens eyes and a little antenna, sitting alone on a small floating asteroid, holding a little glowing lantern, looking up hopefully, a tiny round helper drone hovering beside it, a few twinkling stars around."
+  },
+  "backgrounds/page": {
+    "seed": 901,
+    "w": 1920,
+    "h": 1088,
+    "workflow": "qwen-image",
+    "style": "",
+    "prompt": "Deep space panorama, cinematic and photoreal, a calm very dark sky with sparse small crisp stars, a soft faint violet and deep blue nebula haze in the upper left, the curved horizon of a huge dark night-side planet along the bottom of the frame with a thin glowing blue atmospheric rim and faint golden city lights, a small distant moon in the upper right, mostly empty dark space in the center, no spacecraft, no text."
+  },
+  "backgrounds/page-light": {
+    "seed": 902,
+    "w": 1920,
+    "h": 1088,
+    "workflow": "qwen-image",
+    "style": "",
+    "prompt": "Bright luminous view from high orbit, cinematic and photoreal, the gently curved horizon of a sunlit planet along the bottom of the frame with soft white cloud bands over pale turquoise ocean, a wide glowing pale-blue atmosphere fading upward into a soft powder-blue and pale lavender sky, a pale moon in the upper right, airy, high-key and very light overall, mostly empty pale sky in the center, no spacecraft, no text."
+  }
+}

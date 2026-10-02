@@ -1,0 +1,33 @@
+{
+  "_style": "Premium stylized 3D character render in a serene, gentle storybook style, a small cute nature spirit with soft rounded proportions and a big head, handcrafted collectible figurine look, soft velvety moss, smooth river stone and delicate leaf physically based materials with subtle subsurface glow, soft diffuse key light with a warm rim light, calm and peaceful mood, full body, centered, filling the frame from head to feet, isolated on a pure flat black background, no floor, no shadow, no scenery, no text, no letters, no logos, no border.",
+  "anthropic": {
+    "seed": 21,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small serene fox spirit sitting upright, soft fur in warm terracotta and russet with a cream chest, a short cloak of overlapping red and amber maple leaves draped over its shoulders, soft tufts of bright green moss on its back and the tips of its ears, its fluffy tail curled around its paws, eyes gently closed with a peaceful little smile, holding a small round paper lantern glowing a dim warm amber."
+  },
+  "openai": {
+    "seed": 22,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small gentle forest deer spirit standing calmly and facing the viewer, its body made of soft velvety emerald-green moss and pale lichen, small antlers of twisted silver driftwood sprouting curled young ferns and tiny white star flowers, big round dark eyes with a soft green glow, a few tiny mushrooms growing at its hooves."
+  },
+  "google": {
+    "seed": 23,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small serene water spirit, a rounded childlike figure made entirely of clear flowing river water, a translucent aqua and sapphire-blue body with gentle ripples, refractions and tiny droplets, a round green lily pad worn as a hat with one pink lotus flower, two soft glowing blue eyes and a calm smile, a tiny orange-and-white koi fish swimming slowly through its body, standing still with its hands folded."
+  },
+  "xai": {
+    "seed": 32,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small cute chibi heron spirit with a big round head and big gentle eyes, standing on one leg on a smooth mossy river stone, its soft rounded body and wings made of flowing black sumi-e ink and pale grey mist that blend and fade into each other like brushstrokes, glowing teal-cyan tips on its wing and tail feathers, a long graceful flowing cyan crest plume, calm golden eyes, delicate wisps of pale mist curling around it."
+  },
+  "shell": {
+    "seed": 25,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small floating stone lantern spirit, a round weathered Japanese stone lantern body covered in soft green moss, a tiny roof cap draped with cascading violet wisteria blossoms, a soft violet glow inside its little window with two gentle round eyes, short wispy violet spirit-smoke trailing below it instead of legs, hovering calmly, two tiny fireflies near it."
+  }
+}

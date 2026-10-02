@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Guild</title>
+  <meta name="color-scheme" content="light dark">
+  <script src="/theme.js"></script>
+  <link rel="icon" href="/brand/favicon.png" type="image/png">
+  <link rel="preload" href="/fonts/cinzel.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/vendor/xterm/xterm.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/skins/guild/skin.css">
+  <link rel="stylesheet" href="/skins/professional/skin.css">
+  <link rel="stylesheet" href="/skins/orbital/skin.css">
+  <link rel="stylesheet" href="/skins/grove/skin.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Agent Guild</h1>
+      <button id="version" class="version" type="button" aria-haspopup="dialog" hidden></button>
+    </div>
+    <div class="topbar-end">
+      <div id="connection" class="connection" role="status" aria-live="polite">
+        <span class="dot"></span><span class="label">Connecting…</span>
+      </div>
+      <span id="upgrade-note" class="upgrade-note" hidden></span>
+      <button id="upgrade" class="btn upgrade" type="button" hidden></button>
+      <button id="appearance" class="btn appearance" type="button" popovertarget="appearance-menu" aria-haspopup="dialog">Appearance</button>
+      <div id="appearance-menu" class="appearance-menu" popover role="dialog" aria-label="Appearance">
+        <fieldset id="skin-choices"><legend>Skin</legend></fieldset>
+        <fieldset>
+          <legend>Mode</legend>
+          <label class="choice"><input type="radio" name="theme" value="light"><span class="mode-light">Light</span></label>
+          <label class="choice"><input type="radio" name="theme" value="dark"><span class="mode-dark">Dark</span></label>
+        </fieldset>
+      </div>
+      <button id="restart-manager" class="btn restart-manager" type="button" hidden>Restart manager</button>
+      <button id="stop-manager" class="btn danger stop-manager" type="button" hidden title="Stop the session manager. This ends every session.">Stop manager</button>
+    </div>
+  </header>
+
+  <main id="app" hidden>
+    <section class="launcher" aria-labelledby="launch-heading">
+      <div class="section-head">
+        <h2 id="launch-heading">Start a session</h2>
+        <div class="launch-tools">
+          <label class="cwd">
+            <span>Working folder</span>
+            <input id="cwd" type="text" spellcheck="false" autocomplete="off" placeholder="Home folder">
+          </label>
+          <button id="github-open" class="btn github-open" type="button" aria-haspopup="dialog">Clone from GitHub…</button>
+        </div>
+      </div>
+      <div id="providers" class="providers" role="list"></div>
+    </section>
+
+    <section class="sessions" aria-labelledby="sessions-heading">
+      <div class="section-head">
+        <h2 id="sessions-heading">Sessions <span id="session-count" class="count"></span></h2>
+      </div>
+      <div id="sessions" class="session-grid" role="list"></div>
+      <p id="empty" class="empty">No sessions yet. Pick a provider above to start one. Sessions keep running when you close this page.</p>
+    </section>
+
+    <section class="news" aria-labelledby="news-heading">
+      <div class="section-head">
+        <h2 id="news-heading">Latest news <span id="news-count" class="count"></span></h2>
+        <button id="news-all" class="btn" type="button" aria-haspopup="dialog">All news</button>
+      </div>
+      <ol id="news-latest" class="news-latest" hidden></ol>
+      <p id="news-note" class="empty">Loading news…</p>
+    </section>
+  </main>
+
+  <section id="auth" class="auth" hidden>
+    <h2>Open Agent Guild from the launcher</h2>
+    <p>This page needs the access token of your local session manager. Run this command and it will open the page for you:</p>
+    <pre>agent-guild open</pre>
+    <p>Or paste the token printed by <code>agent-guild url</code>:</p>
+    <form id="auth-form">
+      <input id="auth-token" type="password" autocomplete="off" placeholder="Access token" aria-label="Access token">
+      <button type="submit" class="btn primary">Connect</button>
+    </form>
+    <p id="auth-error" class="error" role="alert"></p>
+  </section>
+
+  <section id="stopped" class="auth notice" hidden aria-live="polite">
+    <h2 id="stopped-title">Stopping the session manager…</h2>
+    <p id="stopped-text">Ending every session. This can take a few seconds.</p>
+    <div id="stopped-help" class="stopped-help" hidden>
+      <p id="stopped-how">To start again, open a terminal and run:</p>
+      <div class="command">
+        <pre>agent-guild open</pre>
+        <button id="copy-command" class="btn" type="button" title="Copy the command">Copy</button>
+      </div>
+      <p id="stopped-launcher" hidden>Or double-click <code id="stopped-launcher-path"></code> in your file manager.</p>
+      <p>This page reconnects by itself when the manager is back.</p>
+    </div>
+  </section>
+
+  <div id="terminal-panel" class="terminal-panel" hidden role="dialog" aria-modal="false" aria-labelledby="panel-title">
+    <div class="panel-bar">
+      <div class="panel-title">
+        <span id="panel-icon" class="provider-icon small"></span>
+        <div>
+          <div id="panel-title" class="title"></div>
+          <div id="panel-sub" class="sub"></div>
+        </div>
+        <div id="panel-agents" class="agents"></div>
+      </div>
+      <div class="panel-actions">
+        <button id="panel-stop" class="btn danger" type="button">Stop</button>
+        <button id="panel-close" class="btn" type="button" title="Hide the terminal. The session keeps running.">Hide</button>
+      </div>
+    </div>
+    <div id="terminal-host" class="terminal-host"></div>
+  </div>
+
+  <dialog id="models" class="models" aria-labelledby="models-title">
+    <div class="models-bar">
+      <span id="models-icon" class="provider-icon small"></span>
+      <div class="models-heading">
+        <h2 id="models-title"></h2>
+        <p id="models-sub" class="sub"></p>
+      </div>
+      <button id="models-close" class="btn" type="button">Close</button>
+    </div>
+    <div class="models-body">
+      <div id="models-columns" class="model-columns" aria-hidden="true"></div>
+      <div id="models-list"></div>
+      <button id="models-more" class="btn models-more" type="button" hidden></button>
+      <p id="models-note" class="models-note"></p>
+    </div>
+    <p id="models-source" class="models-source"></p>
+  </dialog>
+
+  <dialog id="news" class="news-panel" aria-labelledby="news-title">
+    <div class="news-bar">
+      <div class="news-heading">
+        <h2 id="news-title">News</h2>
+        <p id="news-sub" class="sub"></p>
+      </div>
+      <button id="news-close" class="btn" type="button">Close</button>
+    </div>
+    <div id="news-filters" class="news-filters" role="group" aria-label="Show"></div>
+    <div class="news-body">
+      <button id="news-fresh" class="btn news-fresh" type="button" hidden></button>
+      <div id="news-list"></div>
+      <p id="news-empty" class="news-empty" hidden></p>
+    </div>
+    <p id="news-status" class="news-status" hidden></p>
+  </dialog>
+
+  <dialog id="changelog" class="news-panel" aria-labelledby="changelog-title">
+    <div class="news-bar">
+      <div class="news-heading">
+        <h2 id="changelog-title">What’s new</h2>
+        <p id="changelog-sub" class="sub"></p>
+      </div>
+      <button id="changelog-close" class="btn" type="button">Close</button>
+    </div>
+    <div class="news-body">
+      <div id="changelog-actions" class="changelog-actions" hidden>
+        <button id="changelog-upgrade" class="btn upgrade" type="button" hidden></button>
+        <button id="changelog-restart" class="btn restart-manager pending" type="button" hidden></button>
+      </div>
+      <ol id="changelog-list" class="changelog-list"></ol>
+      <p id="changelog-note" class="news-empty" hidden></p>
+    </div>
+    <p id="changelog-status" class="news-status" hidden></p>
+  </dialog>
+
+  <dialog id="history" class="models history" aria-labelledby="history-title">
+    <div class="models-bar">
+      <span id="history-icon" class="provider-icon small"></span>
+      <div class="models-heading">
+        <h2 id="history-title"></h2>
+        <p id="history-sub" class="sub"></p>
+      </div>
+      <button id="history-close" class="btn" type="button">Close</button>
+    </div>
+    <div class="history-tools">
+      <input id="history-filter" type="search" placeholder="Filter by title, folder or id" aria-label="Filter sessions" spellcheck="false" autocomplete="off">
+      <label class="history-here"><input id="history-here" type="checkbox"><span>Working folder only</span></label>
+    </div>
+    <div class="models-body">
+      <div id="history-list" class="history-list" role="list"></div>
+      <p id="history-note" class="models-note"></p>
+    </div>
+    <form id="history-form" class="history-form">
+      <label for="history-id">Resume by id</label>
+      <input id="history-id" type="text" placeholder="Session id or name" spellcheck="false" autocomplete="off">
+      <button type="submit" class="btn">Resume</button>
+    </form>
+  </dialog>
+
+  <dialog id="github" class="models history github" aria-labelledby="github-title">
+    <div class="models-bar">
+      <span class="github-mark" aria-hidden="true"></span>
+      <div class="models-heading">
+        <h2 id="github-title">GitHub</h2>
+        <p id="github-sub" class="sub"></p>
+      </div>
+      <button id="github-close" class="btn" type="button">Close</button>
+    </div>
+    <div id="github-accounts" class="github-accounts" hidden>
+      <div id="github-chips" class="github-chips" role="tablist" aria-label="GitHub accounts"></div>
+      <button id="github-add" class="btn github-add" type="button">Add account</button>
+    </div>
+    <div class="models-body">
+      <section id="github-card" class="github-card" aria-live="polite" hidden></section>
+      <div id="github-status" class="github-status" hidden></div>
+      <div id="github-tools" class="history-tools github-tools" hidden>
+        <input id="github-filter" type="search" placeholder="Filter repositories" aria-label="Filter repositories" spellcheck="false" autocomplete="off">
+        <button id="github-refresh" class="btn" type="button">Refresh</button>
+        <button id="github-new" class="btn" type="button" aria-expanded="false" aria-controls="github-create">New repository</button>
+      </div>
+      <form id="github-create" class="github-card github-create" hidden>
+        <h3>New repository</h3>
+        <div class="github-fields">
+          <label><span>Owner</span><select id="github-create-owner"></select></label>
+          <label><span>Name</span><input id="github-create-name" type="text" required maxlength="100" pattern="[A-Za-z0-9._\-]+" spellcheck="false" autocomplete="off" placeholder="my-project"></label>
+          <label class="wide"><span>Description</span><input id="github-create-description" type="text" maxlength="350" autocomplete="off" placeholder="Optional"></label>
+        </div>
+        <div class="github-options">
+          <label><input id="github-create-private" type="checkbox" checked> Private</label>
+          <label><input id="github-create-readme" type="checkbox" checked> Start with a README</label>
+          <label><input id="github-create-clone" type="checkbox" checked> <span id="github-create-clone-label">Clone it</span></label>
+        </div>
+        <p id="github-create-error" class="github-error" role="alert" hidden></p>
+        <div class="github-actions">
+          <button id="github-create-submit" class="btn primary" type="submit">Create repository</button>
+          <button id="github-create-cancel" class="btn" type="button">Cancel</button>
+        </div>
+      </form>
+      <div id="github-list" class="history-list" role="list"></div>
+      <p id="github-note" class="models-note" hidden></p>
+    </div>
+    <div class="history-form github-form">
+      <label for="github-parent">Clone into</label>
+      <input id="github-parent" type="text" placeholder="Folder that holds your clones" spellcheck="false" autocomplete="off">
+    </div>
+  </dialog>
+
+  <div id="tip" class="tip" aria-hidden="true" hidden><strong id="tip-title"></strong><span id="tip-source"></span><p id="tip-text"></p></div>
+
+  <div id="toast" class="toast" role="alert" hidden></div>
+
+  <template id="provider-template">
+    <article class="provider" role="listitem">
+      <span class="card-art" aria-hidden="true"></span>
+      <div class="provider-head">
+        <span class="provider-icon"></span>
+        <span class="provider-text">
+          <span class="vendor-line"><span class="vendor"></span><span class="tier" hidden></span></span>
+          <span class="tool"></span>
+          <span class="state"></span>
+        </span>
+      </div>
+      <div class="accounts" role="tablist" aria-label="Accounts" hidden></div>
+      <div class="usage"></div>
+      <div class="model-stats"></div>
+      <div class="reporting-row" hidden>
+        <span class="reporting-text"></span>
+        <button class="btn reporting-toggle" type="button"></button>
+      </div>
+      <div class="provider-links">
+        <a class="console-link usage-link" target="_blank" rel="noopener noreferrer">Usage</a>
+        <a class="console-link billing-link" target="_blank" rel="noopener noreferrer">Billing</a>
+      </div>
+      <div class="provider-actions">
+        <button class="btn primary new" type="button">New</button>
+        <button class="btn existing" type="button">Existing…</button>
+        <button class="btn primary install" type="button">Install</button>
+        <button class="btn update" type="button"></button>
+        <span class="hint"></span>
+      </div>
+      <details class="copies" hidden>
+        <summary></summary>
+        <ul></ul>
+      </details>
+    </article>
+  </template>
+
+  <template id="meter-template">
+    <div class="meter">
+      <span class="meter-label"></span>
+      <span class="meter-bar"><span class="meter-fill"></span></span>
+      <span class="meter-value"></span>
+    </div>
+  </template>
+
+  <template id="stat-template">
+    <div class="stat">
+      <span class="stat-label"><span class="stat-name"></span><button class="info" type="button">i</button></span>
+      <span class="stat-reading" role="img">
+        <span class="stat-bar"><span class="stat-fill"></span></span>
+        <span class="stat-value"></span>
+        <span class="stat-note"></span>
+      </span>
+    </div>
+  </template>
+
+  <template id="model-template">
+    <section class="model">
+      <h3 class="model-head">
+        <button class="model-toggle" type="button" aria-expanded="false">
+          <span class="model-title"><span class="model-name"></span></span>
+        </button>
+      </h3>
+      <div class="model-detail" hidden></div>
+    </section>
+  </template>
+
+  <template id="history-template">
+    <article class="history-row" role="listitem">
+      <div class="history-main">
+        <div class="history-title"></div>
+        <div class="history-meta"></div>
+      </div>
+      <button class="session-id" type="button"></button>
+      <button class="btn primary history-resume" type="button"></button>
+    </article>
+  </template>
+
+  <template id="github-repo-template">
+    <article class="history-row github-repo" role="listitem">
+      <div class="history-main">
+        <div class="history-title"><span class="repo-name"></span></div>
+        <div class="history-meta"></div>
+      </div>
+      <button class="btn github-action" type="button"></button>
+    </article>
+  </template>
+
+  <template id="session-template">
+    <article class="session-card" role="listitem" tabindex="0">
+      <span class="card-art" aria-hidden="true"></span>
+      <span class="card-aura" aria-hidden="true"></span>
+      <span class="level-badge" aria-hidden="true"></span>
+      <div class="card-top">
+        <span class="provider-icon"></span>
+        <div class="card-title">
+          <div class="name"></div>
+          <div class="meta"><span class="meta-text"></span><button class="session-id" type="button" hidden></button></div>
+        </div>
+        <button class="model-pill" type="button"></button>
+        <span class="status-pill"></span>
+      </div>
+      <div class="cwd-line"></div>
+      <div class="agents-row">
+        <span class="agents-label">Agents</span>
+        <div class="agents"></div>
+        <button class="reporting-why" type="button" hidden>Why?</button>
+      </div>
+      <div class="card-actions">
+        <button class="btn primary open" type="button">Open</button>
+        <button class="btn resume" type="button" hidden>Resume</button>
+        <button class="btn primary use-folder" type="button" hidden>Use folder</button>
+        <button class="btn rename" type="button">Rename</button>
+        <button class="btn danger stop" type="button">Stop</button>
+        <button class="btn remove" type="button">Remove</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="/vendor/xterm/xterm.js"></script>
+  <script src="/vendor/xterm/addon-fit.js"></script>
+  <script src="/vendor/xterm/addon-web-links.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

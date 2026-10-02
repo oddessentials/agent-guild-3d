@@ -1,0 +1,36 @@
+{
+  "_style": "Premium stylized 3D character render, a cute chibi robot with collectible vinyl-toy proportions and a big head, glossy enamel and brushed metal physically based materials, cinematic soft key light with a strong colored rim light, full body standing, centered, filling the frame from head to feet, isolated on a pure flat black background, no floor, no shadow, no scenery, no text, no letters, no logos, no border.",
+  "anthropic": {
+    "seed": 11,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small robot sorcerer wearing a hooded burnt-orange robe embroidered with fine gold runes over a bronze robot body, a round dark glass faceplate inside the hood with two soft glowing amber eyes and a tiny smile, standing calm with both open palms at its sides, a few dim amber rune glyphs floating quietly around it."
+  },
+  "openai": {
+    "seed": 12,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small knight robot in sleek obsidian-black armor plating with thin glowing emerald-green seams, a closed rounded helm with one narrow glowing emerald visor slit, a short dark cape, the hilt of a greatsword over its shoulder, standing at rest with arms crossed.",
+    "edit_seeds": {
+      "working": 10
+    }
+  },
+  "google": {
+    "seed": 14,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "Twin robot star-mages, two small matching robots standing close shoulder to shoulder, both in deep sapphire-blue hooded robes with fine silver star embroidery over pearl-white robot bodies, each with a smooth round glossy pearl-white robot helmet face with no nose, no mouth and no hair, just two big glowing blue lens eyes, a single glowing blue-white four-pointed star floating between them at chest height, calm and serene."
+  },
+  "xai": {
+    "seed": 12,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small rogue robot in a glossy jet-black armored long coat with a high collar and thin glowing electric-cyan circuit sigils, a sleek black helmet head with a narrow glowing cyan visor, confident relaxed stance with hands in its coat pockets."
+  },
+  "shell": {
+    "seed": 12,
+    "w": 1056,
+    "h": 1408,
+    "prompt": "A small hooded spectral robot made of translucent glowing violet hologram light, no face, a single glowing bright violet '>' chevron symbol inside the dark hood, its robot body dissolving into wispy violet light tendrils below the waist, hovering calmly."
+  }
+}

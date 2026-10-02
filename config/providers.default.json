@@ -1,0 +1,142 @@
+{
+  "providers": [
+    {
+      "id": "anthropic",
+      "vendor": "Anthropic",
+      "tool": "Claude Code",
+      "command": "claude",
+      "package": "@anthropic-ai/claude-code",
+      "versionArgs": ["--version"],
+      "usage": "claude",
+      "history": "claude",
+      "reporting": "claude",
+      "homeVar": "CLAUDE_CONFIG_DIR",
+      "accountEnv": { "CLAUDE_SECURESTORAGE_CONFIG_DIR": "{dir}" },
+      "hooks": { "path": "settings.json", "example": "claude-code-settings.json" },
+      "modelPattern": "claude-(?:opus|sonnet|haiku|fable|\\d)[a-z0-9.-]*|\\b(?:opus|sonnet|haiku|fable)\\s?\\d+(?:\\.\\d+)?",
+      "args": [],
+      "resumeArgs": ["--resume", "{id}"],
+      "color": "#D97757",
+      "monogram": "A",
+      "install": "curl -fsSL https://claude.ai/install.sh | bash",
+      "npmNote": "npm installs the same native build as Anthropic's installer.",
+      "channels": {
+        "native": { "paths": ["~/.local/bin/claude", "~/.local/share/claude"], "update": ["update"], "uninstall": "rm -f ~/.local/bin/claude && rm -rf ~/.local/share/claude" },
+        "brew": { "names": ["claude-code", "claude-code@latest"] },
+        "winget": { "id": "Anthropic.ClaudeCode" },
+        "legacy": { "paths": ["~/.claude/local"], "guidance": "This copy comes from an older Claude Code installer. Remove ~/.claude/local and reinstall with the current installer.", "uninstall": "rm -rf ~/.claude/local" }
+      },
+      "docs": "https://code.claude.com/docs/en/setup",
+      "usageUrl": "https://claude.ai/settings/usage",
+      "billingUrl": "https://claude.ai/settings/billing",
+      "win32": {
+        "install": "irm https://claude.ai/install.ps1 | iex",
+        "channels": {
+          "native": { "paths": ["~/.local/bin/claude", "~/.local/share/claude"], "update": ["update"], "uninstall": "Remove-Item -Path \"$env:USERPROFILE\\.local\\bin\\claude.exe\" -Force; Remove-Item -Path \"$env:USERPROFILE\\.local\\share\\claude\" -Recurse -Force" },
+          "winget": { "id": "Anthropic.ClaudeCode" },
+          "legacy": { "paths": ["~/.claude/local"], "guidance": "This copy comes from an older Claude Code installer. Remove ~/.claude/local and reinstall with the current installer.", "uninstall": "Remove-Item -Recurse -Force \"$env:USERPROFILE\\.claude\\local\"" }
+        }
+      }
+    },
+    {
+      "id": "openai",
+      "vendor": "OpenAI",
+      "tool": "Codex CLI",
+      "command": "codex",
+      "package": "@openai/codex",
+      "versionArgs": ["--version"],
+      "usage": "codex",
+      "history": "codex",
+      "reporting": "codex",
+      "homeVar": "CODEX_HOME",
+      "hooks": { "path": "hooks.json", "example": "codex-hooks.json" },
+      "modelPattern": "\\bgpt-\\d[a-z0-9.-]*",
+      "args": [],
+      "resumeArgs": ["resume", "{id}"],
+      "color": "#10A37F",
+      "monogram": "O",
+      "install": "curl -fsSL https://chatgpt.com/codex/install.sh | sh",
+      "npmNote": "npm installs the native Codex binary.",
+      "channels": {
+        "native": { "paths": ["~/.local/bin/codex", "~/.codex/packages/standalone"], "update": ["update"] },
+        "brew": { "names": ["codex"] },
+        "winget": { "id": "OpenAI.Codex" }
+      },
+      "docs": "https://github.com/openai/codex",
+      "usageUrl": "https://chatgpt.com/codex/settings/usage",
+      "billingUrl": "https://chatgpt.com/#settings/Billing",
+      "win32": {
+        "install": "powershell -ExecutionPolicy ByPass -c \"irm https://chatgpt.com/codex/install.ps1 | iex\"",
+        "channels": {
+          "native": { "paths": ["~/AppData/Local/Programs/OpenAI/Codex/bin", "~/.codex/packages/standalone"], "update": ["update"] },
+          "winget": { "id": "OpenAI.Codex" }
+        }
+      }
+    },
+    {
+      "id": "google",
+      "vendor": "Google",
+      "tool": "Gemini CLI",
+      "command": "gemini",
+      "package": "@google/gemini-cli",
+      "versionArgs": ["--version"],
+      "usage": "gemini",
+      "history": "gemini",
+      "reporting": "gemini",
+      "homeVar": "GEMINI_CLI_HOME",
+      "accountEnv": { "GEMINI_FORCE_FILE_STORAGE": "true" },
+      "hooks": { "path": ".gemini/settings.json", "example": "gemini-settings.json" },
+      "modelPattern": "\\bgemini-\\d[a-z0-9.-]*",
+      "args": [],
+      "resumeArgs": ["--resume", "{id}"],
+      "color": "#4285F4",
+      "monogram": "G",
+      "install": "npm install -g @google/gemini-cli",
+      "channels": {
+        "brew": { "names": ["gemini-cli"] }
+      },
+      "docs": "https://github.com/google-gemini/gemini-cli",
+      "usageUrl": "https://aistudio.google.com/usage",
+      "billingUrl": "https://one.google.com/settings"
+    },
+    {
+      "id": "xai",
+      "vendor": "xAI",
+      "tool": "Grok Build",
+      "command": "grok",
+      "package": "@xai-official/grok",
+      "versionArgs": ["--version"],
+      "history": "grok",
+      "reporting": "grok",
+      "homeVar": "GROK_HOME",
+      "hooks": { "path": "hooks/agent-guild.json", "example": "grok-hooks.json" },
+      "modelPattern": "\\bgrok-(?:build|\\d)[a-z0-9.-]*",
+      "args": [],
+      "resumeArgs": ["--resume", "{id}"],
+      "color": "#6B7280",
+      "monogram": "X",
+      "install": "curl -fsSL https://x.ai/cli/install.sh | bash",
+      "npmNote": "npm installs the native grok binary into ~/.grok/bin.",
+      "channels": {
+        "native": { "paths": ["~/.grok/bin", "~/.grok/downloads"], "update": ["update"], "sharedWithNpm": true }
+      },
+      "docs": "https://docs.x.ai/build/overview",
+      "usageUrl": "https://grok.com/?_s=usage",
+      "billingUrl": "https://grok.com/?_s=billing",
+      "win32": {
+        "install": "irm https://x.ai/cli/install.ps1 | iex"
+      }
+    },
+    {
+      "id": "shell",
+      "vendor": "Local",
+      "tool": "Shell",
+      "command": "@shell",
+      "args": [],
+      "color": "#8B5CF6",
+      "monogram": ">",
+      "install": "",
+      "docs": ""
+    }
+  ]
+}

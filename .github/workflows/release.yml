@@ -1,0 +1,182 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: .github/release/package-lock.json
+      - run: npm ci --ignore-scripts
+        working-directory: .github/release
+      - id: plan
+        env:
+          RELEASE_PLAN_DIR: ${{ runner.temp }}/release-plan
+        run: |
+          git clone --quiet --bare . "$RUNNER_TEMP/origin.git"
+          node .github/release/node_modules/semantic-release/bin/semantic-release.js --dry-run --repository-url "file://$RUNNER_TEMP/origin.git"
+          if [ -f "$RELEASE_PLAN_DIR/version" ]; then
+            version=$(cat "$RELEASE_PLAN_DIR/version")
+            if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo "::error::The planned version \"$version\" is not a plain release version."
+              exit 1
+            fi
+            echo "version=$version" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.plan.outputs.version != ''
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-plan
+          path: ${{ runner.temp }}/release-plan/notes.md
+          if-no-files-found: error
+          retention-days: 7
+
+  ci:
+    name: CI
+    needs: plan
+    if: needs.plan.outputs.version != ''
+    uses: ./.github/workflows/ci.yml
+    with:
+      version: ${{ needs.plan.outputs.version }}
+
+  publish:
+    name: Publish to npm
+    needs: [plan, ci]
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      id-token: write
+    outputs:
+      name: ${{ steps.publish.outputs.name }}
+      integrity: ${{ steps.publish.outputs.integrity }}
+    steps:
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: package
+      - id: publish
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: |
+          sha256sum --check SHA256SUMS
+          tarball=$(echo ./*.tgz)
+          manifest() { tar -xzOf "$tarball" package/package.json | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).$1"; }
+          name=$(manifest name)
+          packed=$(manifest version)
+          if [ "$packed" != "$VERSION" ]; then
+            echo "::error::The package is version $packed but the plan is $VERSION."
+            exit 1
+          fi
+          integrity="sha512-$(openssl dgst -sha512 -binary "$tarball" | base64 -w 0)"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "integrity=$integrity" >> "$GITHUB_OUTPUT"
+          published=$(npm view "$name@$VERSION" dist.integrity --prefer-online 2>/dev/null || true)
+          if [ "$published" = "$integrity" ]; then
+            echo "$name@$VERSION is already on npm with these contents."
+          elif [ -n "$published" ]; then
+            echo "::error::$name@$VERSION is already on npm with different contents. If an earlier release run published it and then failed, re-run the failed jobs of that run so it is tagged, then re-run this one."
+            exit 1
+          else
+            npm publish "$tarball" --provenance --access public
+          fi
+
+  release:
+    name: Tag and release
+    needs: [plan, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: package
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-plan
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: |
+          sha256sum --check SHA256SUMS
+          tag="v$VERSION"
+          if tagged=$(gh api "repos/$GH_REPO/git/ref/tags/$tag" --jq .object.sha 2>/dev/null); then
+            if [ "$tagged" != "$GITHUB_SHA" ]; then
+              echo "::error::$tag already points at $tagged, not at $GITHUB_SHA."
+              exit 1
+            fi
+          else
+            gh api "repos/$GH_REPO/git/refs" --silent -f "ref=refs/tags/$tag" -f "sha=$GITHUB_SHA"
+          fi
+          state=$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null || echo missing)
+          if [ "$state" = false ]; then
+            echo "Release $tag already exists."
+          else
+            if [ "$state" = true ]; then
+              gh release delete "$tag" --yes
+            fi
+            gh release create "$tag" --verify-tag --title "$tag" --notes-file notes.md ./*.tgz SHA256SUMS
+          fi
+
+  confirm:
+    name: Install from npm
+    needs: [plan, publish]
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: tests/package
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+      - env:
+          PACKAGE: ${{ needs.publish.outputs.name }}@${{ needs.plan.outputs.version }}
+          VERSION: ${{ needs.plan.outputs.version }}
+          INTEGRITY: ${{ needs.publish.outputs.integrity }}
+        run: |
+          deadline=$((SECONDS + 60 * 60))
+          until published=$(npm view "$PACKAGE" dist.integrity --prefer-online 2>npm-view.log) && [ -n "$published" ]; do
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              cat npm-view.log
+              echo "::error::npm still does not serve $PACKAGE an hour after it was published. Re-run this job once \"npm view $PACKAGE\" shows it."
+              exit 1
+            fi
+            echo "npm is still processing $PACKAGE ($((SECONDS / 60)) min): $(grep -m 1 -o 'No match found.*' npm-view.log || head -n 1 npm-view.log)"
+            sleep 30
+          done
+          if [ "$published" != "$INTEGRITY" ]; then
+            echo "::error::npm serves $PACKAGE as \"$published\", not the tested $INTEGRITY."
+            exit 1
+          fi
+          for attempt in 1 2 3 4 5 6; do
+            if npm install --global "$PACKAGE"; then break; fi
+            if [ "$attempt" = 6 ]; then exit 1; fi
+            echo "npm lists $PACKAGE but could not install it yet; its package list may still be cached. Trying again in a minute."
+            sleep 60
+          done
+          node tests/package/smoke.mjs "$(npm prefix --global)" --version "$VERSION"

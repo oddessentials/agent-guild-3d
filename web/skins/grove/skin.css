@@ -1,0 +1,395 @@
+/* The Grove skin: moss, water and quiet skies, with a cast of gentle nature spirits.
+   Everything here applies only while <html data-skin="grove">; docs/SKINS.md lists every slot.
+   The art is built by concept-art/grove-skin/source/build.py. */
+
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/fraunces.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:where(:root[data-skin="grove"]) {
+  --bg: #eef0e6;
+  --surface: #fbfaf4;
+  --surface-2: #f1f2e7;
+  --border: #d8dcc8;
+  --text: #1e2a21;
+  --muted: #5a6a5d;
+  --heading: #1b3324;
+  --accent: #3b7550;
+  --accent-fill: #3b7550;
+  --accent-text: #ffffff;
+  --danger: #b0392c;
+  --ok: #2c7a47;
+  --warn: #965f00;
+  --gold: #a5863e;
+  --gold-ink: #6a5420;
+  --focus: #3b7550;
+  --shadow: 0 1px 2px rgba(30, 50, 30, 0.06), 0 6px 18px rgba(30, 50, 30, 0.07);
+  --radius: 14px;
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+
+  --paper: rgba(251, 250, 244, 0.84);
+  --paper-strong: rgba(251, 250, 244, 0.95);
+  --vine: linear-gradient(90deg, transparent, #7fae6a 20%, #4f8a5a 50%, #8fbf9a 80%, transparent);
+  --page-art: image-set(url("page-light.avif") type("image/avif"), url("page-light.webp") type("image/webp"));
+  --page-veil: linear-gradient(rgba(244, 242, 234, 0.5), rgba(244, 242, 234, 0.26) 45%, rgba(244, 242, 234, 0.36));
+  --card-backdrop: image-set(url("ui/card-light.avif") type("image/avif"), url("ui/card-light.webp") type("image/webp"));
+  --empty-shadow: rgba(40, 70, 40, 0.28);
+  --card-shadow: 0 1px 2px rgba(30, 50, 30, 0.06), 0 10px 28px rgba(30, 50, 30, 0.1);
+  --card-hover-shadow: 0 2px 4px rgba(30, 50, 30, 0.06), 0 16px 36px color-mix(in srgb, var(--pc) 18%, rgba(30, 50, 30, 0.12));
+  --dialog-shadow: 0 30px 70px -18px rgba(20, 40, 25, 0.35);
+  --sunbeam: rgba(255, 248, 220, 0.34);
+
+  body { background: var(--bg); }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--page-veil), var(--page-art) center bottom / cover no-repeat;
+  }
+  h2 { font-weight: 600; letter-spacing: 0.01em; }
+
+  .topbar { background: var(--paper); backdrop-filter: blur(12px) saturate(1.15); border-bottom: 1px solid transparent; border-image: var(--vine) 1; }
+  .version { font-family: var(--font-display); }
+  .version.unread::after { background: radial-gradient(circle at 35% 30%, #fff 0 14%, var(--accent) 52%); box-shadow: 0 0 0 2px var(--surface), 0 0 8px color-mix(in srgb, var(--accent) 60%, transparent); }
+  .connection .dot { box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot) 16%, transparent), 0 0 7px color-mix(in srgb, var(--dot) 70%, transparent); }
+  .section-head { padding-bottom: 9px; border-bottom: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 30%, transparent) 45%, transparent 85%) 1; }
+
+  /* Provider colour and art. Unknown providers fall back to the Shell lantern spirit. */
+  .provider, .session-card {
+    --pc: #9a7ae0;
+    --idle: image-set(url("characters/shell/idle.avif") type("image/avif"), url("characters/shell/idle.webp") type("image/webp"));
+    --working: image-set(url("characters/shell/working.avif") type("image/avif"), url("characters/shell/working.webp") type("image/webp"));
+    --locked: image-set(url("characters/shell/locked.avif") type("image/avif"), url("characters/shell/locked.webp") type("image/webp"));
+  }
+  .provider[data-id="anthropic"], .session-card[data-provider="anthropic"] {
+    --pc: #d97757;
+    --idle: image-set(url("characters/anthropic/idle.avif") type("image/avif"), url("characters/anthropic/idle.webp") type("image/webp"));
+    --working: image-set(url("characters/anthropic/working.avif") type("image/avif"), url("characters/anthropic/working.webp") type("image/webp"));
+    --locked: image-set(url("characters/anthropic/locked.avif") type("image/avif"), url("characters/anthropic/locked.webp") type("image/webp"));
+  }
+  .provider[data-id="openai"], .session-card[data-provider="openai"] {
+    --pc: #4caf6e;
+    --idle: image-set(url("characters/openai/idle.avif") type("image/avif"), url("characters/openai/idle.webp") type("image/webp"));
+    --working: image-set(url("characters/openai/working.avif") type("image/avif"), url("characters/openai/working.webp") type("image/webp"));
+    --locked: image-set(url("characters/openai/locked.avif") type("image/avif"), url("characters/openai/locked.webp") type("image/webp"));
+  }
+  .provider[data-id="google"], .session-card[data-provider="google"] {
+    --pc: #4a9be8;
+    --idle: image-set(url("characters/google/idle.avif") type("image/avif"), url("characters/google/idle.webp") type("image/webp"));
+    --working: image-set(url("characters/google/working.avif") type("image/avif"), url("characters/google/working.webp") type("image/webp"));
+    --locked: image-set(url("characters/google/locked.avif") type("image/avif"), url("characters/google/locked.webp") type("image/webp"));
+  }
+  .provider[data-id="xai"], .session-card[data-provider="xai"] {
+    --pc: #2fb8c6;
+    --idle: image-set(url("characters/xai/idle.avif") type("image/avif"), url("characters/xai/idle.webp") type("image/webp"));
+    --working: image-set(url("characters/xai/working.avif") type("image/avif"), url("characters/xai/working.webp") type("image/webp"));
+    --locked: image-set(url("characters/xai/locked.avif") type("image/avif"), url("characters/xai/locked.webp") type("image/webp"));
+  }
+
+  .provider-icon[data-provider="anthropic"] { --icon: image-set(url("icons/anthropic.avif") type("image/avif"), url("icons/anthropic.webp") type("image/webp")); }
+  .provider-icon[data-provider="openai"] { --icon: image-set(url("icons/openai.avif") type("image/avif"), url("icons/openai.webp") type("image/webp")); }
+  .provider-icon[data-provider="google"] { --icon: image-set(url("icons/google.avif") type("image/avif"), url("icons/google.webp") type("image/webp")); }
+  .provider-icon[data-provider="xai"] { --icon: image-set(url("icons/xai.avif") type("image/avif"), url("icons/xai.webp") type("image/webp")); }
+  .provider-icon[data-provider="shell"] { --icon: image-set(url("icons/shell.avif") type("image/avif"), url("icons/shell.webp") type("image/webp")); }
+  .provider-icon:not(.has-image)[data-provider="anthropic"],
+  .provider-icon:not(.has-image)[data-provider="openai"],
+  .provider-icon:not(.has-image)[data-provider="google"],
+  .provider-icon:not(.has-image)[data-provider="xai"],
+  .provider-icon:not(.has-image)[data-provider="shell"] {
+    background: var(--icon) center / cover no-repeat; color: transparent; border-radius: 50%;
+    box-shadow: 0 0 0 1.5px color-mix(in srgb, var(--c) 45%, #fff), 0 2px 6px rgba(20, 40, 25, 0.25);
+  }
+
+  /* Cards: soft paper panels with a hairline inner frame and a sprig of leaves in the corner. */
+  .provider, .session-card {
+    position: relative; isolation: isolate; overflow: hidden;
+    padding: 16px; border-radius: 18px; background: var(--paper); backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--pc) 18%, var(--border)); box-shadow: var(--card-shadow);
+    transition: border-color 0.4s, box-shadow 0.4s, transform 0.6s var(--ease);
+  }
+  .provider:hover, .session-card:hover {
+    transform: translateY(-2px); border-color: color-mix(in srgb, var(--pc) 45%, var(--border)); box-shadow: var(--card-hover-shadow);
+  }
+  .provider::after, .session-card::after {
+    content: ""; position: absolute; inset: 5px; z-index: 2; pointer-events: none;
+    border: 1px solid color-mix(in srgb, var(--pc) 22%, transparent); border-radius: 14px;
+    background: url("ui/sprig.svg") right -1px top -1px / 46px 46px no-repeat;
+  }
+  /* Hover: a slow beam of sunlight passes across the card. */
+  .provider::before {
+    content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(115deg, transparent 35%, var(--sunbeam) 50%, transparent 65%);
+    transform: translateX(-110%);
+  }
+  .provider:hover::before { transform: translateX(110%); transition: transform 1.6s var(--ease); }
+
+  .card-art { position: absolute; z-index: -1; overflow: hidden; pointer-events: none; background: var(--card-backdrop) center / cover; }
+  .card-art::before { content: ""; position: absolute; inset: 0; background: var(--idle) no-repeat; }
+  .provider .card-art::before { transition: transform 0.8s var(--ease); }
+  .provider:hover .card-art::before { transform: translate(calc(var(--px, 0) * -6px), calc(var(--py, 0) * -4px)) scale(1.035); }
+  .provider.unavailable { border-color: var(--border); }
+  .provider.unavailable::after { border-color: color-mix(in srgb, var(--muted) 22%, transparent); }
+  .provider.unavailable .card-art { filter: saturate(0.25) brightness(0.92); }
+  .provider.unavailable .card-art::before { background-image: var(--locked); }
+  .provider.unavailable::after {
+    background: url("ui/lock.svg") right 12px top 12px / 32px 32px no-repeat;
+  }
+
+  .session-card { min-height: 196px; }
+  .session-card .card-art::after {
+    content: ""; position: absolute; inset: 0; background: var(--working) no-repeat;
+    opacity: 0; transition: opacity 0.9s var(--ease);
+  }
+  .session-card:has(.status-pill.active) .card-art::after { opacity: 1; }
+  .session-card:has(.status-pill.active) { border-color: color-mix(in srgb, var(--pc) 55%, var(--border)); }
+  .session-card.exited .card-art { filter: grayscale(1) brightness(0.85); }
+  .session-card .card-top > .provider-icon { display: none; }
+  .session-card .card-top { flex-wrap: wrap; gap: 6px 8px; }
+  .session-card .card-title { flex-basis: 100%; }
+
+  /* Working: ripples spread across still water beneath the spirit while fireflies rise around it. */
+  .card-aura { position: absolute; z-index: -1; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 0.9s var(--ease); }
+  .card-aura::before {
+    content: ""; position: absolute; left: 50%; bottom: 6%; width: 120%; aspect-ratio: 3; translate: -50% 0;
+    border-radius: 50%;
+    background: repeating-radial-gradient(closest-side, transparent 0 9%, color-mix(in srgb, var(--pc) 55%, #fff) 10.5%, transparent 12.5% 20%);
+    mask: radial-gradient(closest-side, #000 30%, transparent 100%);
+    transform-origin: 50% 50%;
+  }
+  .card-aura::after {
+    content: ""; position: absolute; inset: 0 0 auto; height: calc(100% + 110px);
+    background-image:
+      radial-gradient(circle, #fff6c4 0 1.3px, color-mix(in srgb, #ffe27a 55%, transparent) 2.2px, transparent 4px),
+      radial-gradient(circle, color-mix(in srgb, var(--pc) 70%, #fff) 0 1px, transparent 3px),
+      radial-gradient(circle, #e8ffd0 0 0.9px, transparent 2.6px);
+    background-size: 52px 110px, 71px 55px, 39px 110px;
+    background-position: 8px 14px, 33px 36px, 20px 70px;
+  }
+  .session-card:has(.status-pill.active) .card-aura { opacity: 1; }
+  .session-card:has(.status-pill.active) .card-aura::before { animation: grove-ripple 3.6s ease-out infinite; }
+  .session-card:has(.status-pill.active) .card-aura::after { animation: grove-fireflies 7s linear infinite; }
+  body:has(#terminal-panel:not([hidden])) main :is(.card-aura, .status-pill, .agent)::before,
+  body:has(#terminal-panel:not([hidden])) main :is(.card-aura, .agent)::after { animation-play-state: paused; }
+
+  /* The level is carved into a mossy river stone. */
+  .level-badge {
+    display: grid; place-items: center; position: absolute; left: 10px; bottom: 10px; z-index: 3;
+    width: 54px; height: 48px; padding: 3px 0 0 4px;
+    background: url("ui/stone.png") center / contain no-repeat;
+    font: 600 1.05rem var(--font-display); color: #f3f6ee; font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 0 6px rgba(0, 0, 0, 0.55);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
+  }
+  .level-badge:empty { display: none; }
+  .level-badge.level-up { animation: grove-level-up 1.4s var(--ease); }
+
+  .agent {
+    --fc: var(--c);
+    border-width: 1.5px; border-color: color-mix(in srgb, var(--fc) 75%, #fff); place-items: end end; padding: 0 3px 1px 0;
+    background: #0d1512 center / 100% auto no-repeat;
+    color: #fff; font-size: 0.6rem; text-shadow: 0 0 3px #000, 0 1px 2px #000;
+    box-shadow: 0 0 10px color-mix(in srgb, var(--fc) 40%, transparent);
+  }
+  .session-card .agent { width: 34px; height: 34px; }
+  .agent.working::after { border-color: var(--fc); }
+  .agent[data-familiar="flame"] { --fc: #f2994a; background-image: url("familiars/flame.png"); }
+  .agent[data-familiar="leaf"] { --fc: #6cc46a; background-image: url("familiars/leaf.png"); }
+  .agent[data-familiar="night"] { --fc: #a888e8; background-image: url("familiars/night.png"); }
+  .agent[data-familiar="aether"] { --fc: #a9d8f0; background-image: url("familiars/aether.png"); }
+  .agent.summon { animation: grove-sprout 0.9s var(--ease) both; }
+
+  .meter-label { padding-left: 19px; background: url("ui/drop.svg") left center / 14px 14px no-repeat; }
+  .meter + .meter .meter-label { background-image: url("ui/leaf.svg"); }
+  .meter-bar, .stat-bar { height: 7px; border-radius: 4px; background: color-mix(in srgb, var(--border) 70%, transparent); }
+  .meter-fill { border-radius: 4px; background: linear-gradient(90deg, #2f7fc0, #6cc0e8); }
+  .meter + .meter .meter-fill { background: linear-gradient(90deg, #2f7a45, #7cc25e); }
+  .meter.low .meter-fill { background: linear-gradient(90deg, #9a6200, #e0a74a); }
+  .meter.empty .meter-fill { background: linear-gradient(90deg, #a5352a, #e06a5c); }
+  .stat-fill { border-radius: 4px; background: linear-gradient(90deg, color-mix(in srgb, var(--tier) 60%, #1b3324), var(--tier)); }
+  .model-stats-head { color: var(--accent); }
+  .stat-tier { border-radius: 7px; font-family: var(--font-display); }
+  .tier-s { --tier: #b08518; --tier-ink: #6b4d00; }
+  .tier-a { --tier: #3f8f5a; --tier-ink: #245a37; }
+  .tier-b { --tier: #3a86c8; --tier-ink: #1d568a; }
+  .tier-c { --tier: #8a9a3a; --tier-ink: #55601c; }
+  .tier-d { --tier: #98a39a; --tier-ink: #4f5a52; }
+
+  #empty {
+    padding: 18px 16px 16px; text-align: center; border-radius: 18px;
+    background: var(--paper); backdrop-filter: blur(10px); border: 1px solid var(--border); box-shadow: var(--card-shadow);
+  }
+  .section-head h2 { text-shadow: 0 0 10px var(--bg), 0 0 3px var(--bg); }
+  #empty::before {
+    content: ""; display: block; width: 230px; height: 190px; margin: 0 auto 12px;
+    background: image-set(url("ui/empty-state.avif") type("image/avif"), url("ui/empty-state.webp") type("image/webp")) center / contain no-repeat;
+    filter: drop-shadow(0 12px 18px var(--empty-shadow));
+    animation: grove-float 8s ease-in-out infinite alternate;
+  }
+
+  .status-pill { border: 1px solid var(--border); background: var(--paper-strong); }
+  .status-pill.active { border-color: color-mix(in srgb, var(--ok) 40%, transparent); background: color-mix(in srgb, var(--ok) 9%, var(--surface)); }
+  .status-pill.exited { border-color: color-mix(in srgb, var(--danger) 35%, transparent); background: color-mix(in srgb, var(--danger) 6%, var(--surface)); }
+  .model-pill { border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+  .provider .tier { font-family: var(--font-display); border-color: color-mix(in srgb, var(--pc) 40%, var(--border)); color: color-mix(in srgb, var(--pc) 50%, var(--text)); background: color-mix(in srgb, var(--pc) 9%, var(--surface)); }
+
+  .btn { background: var(--paper-strong); border-radius: 999px; }
+  .btn:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); }
+  .btn.primary {
+    border-color: transparent; color: #fff; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(135deg, #4f9163, #2d6b45);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 4px 14px rgba(45, 107, 69, 0.28);
+  }
+  .btn.primary:hover { filter: brightness(1.07); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 6px 20px rgba(45, 107, 69, 0.36); }
+  .btn.danger:hover { border-color: var(--danger); box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 14%, transparent); }
+  .cwd input, .auth input, .history-tools input[type="search"], .history-form input, .github-fields input, .github-fields select { background: var(--paper-strong); }
+
+  .models, .news-panel, .auth, .news-latest, .appearance-menu { background: var(--paper-strong); backdrop-filter: blur(16px); }
+  .models, .news-panel { box-shadow: var(--dialog-shadow); }
+  .model-columns, .news-day { background: transparent; backdrop-filter: blur(16px); }
+  .models::backdrop, .news-panel::backdrop { background: rgba(20, 36, 26, 0.34); backdrop-filter: blur(3px); }
+  .models { border-radius: 20px; }
+  .models::after, .auth::after {
+    content: ""; position: absolute; inset: 7px; z-index: 2; pointer-events: none;
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent); border-radius: 15px;
+  }
+  .models-bar, .panel-bar { border-bottom: 1px solid transparent; border-image: var(--vine) 1; }
+  .model-group h4, .news-day, .changelog-type { font-family: var(--font-display); letter-spacing: 0.04em; color: var(--gold-ink); }
+  .news-latest { border-radius: 16px; }
+  .news-row { transition: background-color 0.2s; }
+  .news-row:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  .news-row:first-child { border-radius: 16px 16px 0 0; }
+  .news-row:last-child { border-radius: 0 0 16px 16px; }
+  .news-filter { border-radius: 999px; }
+  .news-filter[aria-pressed="true"] { border-color: transparent; color: #fff; background: linear-gradient(135deg, #4f9163, #2d6b45); }
+  .auth { position: relative; border-radius: 20px; padding: 32px; box-shadow: var(--dialog-shadow); }
+  .terminal-panel { border-radius: 14px; border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); box-shadow: 0 30px 70px rgba(10, 24, 16, 0.4); }
+  .panel-bar { background: var(--paper-strong); }
+  .tip { background: #13201a; color: #e4ece4; border: 1px solid #2f4a3a; border-radius: 10px; box-shadow: 0 12px 30px rgba(8, 18, 12, 0.45); }
+  .tip strong { color: #b9e3a6; font-family: var(--font-display); }
+
+  .providers.deal > .provider { animation: grove-bloom 0.9s var(--ease) both; }
+  .providers.deal > .provider:nth-child(2) { animation-delay: 0.09s; }
+  .providers.deal > .provider:nth-child(3) { animation-delay: 0.18s; }
+  .providers.deal > .provider:nth-child(4) { animation-delay: 0.27s; }
+  .providers.deal > .provider:nth-child(5) { animation-delay: 0.36s; }
+  .providers.deal > .provider:nth-child(n + 6) { animation-delay: 0.45s; }
+  .session-card.enter { animation: grove-drift 0.8s var(--ease) both; }
+
+  /* Light: each spirit sits in a rounded window onto a sunlit glade. */
+  .card-art { border-radius: 13px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 0 0 1px color-mix(in srgb, var(--pc) 30%, #cfd6c0), 0 2px 8px rgba(30, 50, 30, 0.16); }
+  .provider { padding-top: 238px; }
+  .provider .card-art { inset: 12px 12px auto; height: 212px; }
+  .provider .card-art::before { background-size: 104% auto; background-position: 50% 10%; }
+  .session-card { padding-left: 160px; }
+  .session-card .card-art, .session-card .card-aura { inset: 12px auto 12px 12px; width: 134px; border-radius: 13px; }
+  .session-card .card-art::before, .session-card .card-art::after { background-size: 150% auto; background-position: 50% 8%; }
+  .session-card .level-badge { left: 14px; bottom: 14px; }
+
+  @media (max-width: 640px) {
+    .session-card { padding-left: 140px; }
+    .session-card .card-art, .session-card .card-aura { width: 114px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .provider, .session-card, .card-aura, .session-card .card-art::after, .provider .card-art::before { transition: none; }
+    .provider:hover, .session-card:hover, .provider:hover .card-art::before { transform: none; }
+    .provider::before { display: none; }
+    .providers.deal > .provider, .session-card.enter, .level-badge.level-up, .agent.summon, #empty::before,
+    .session-card:has(.status-pill.active) .card-aura::before, .session-card:has(.status-pill.active) .card-aura::after { animation: none; }
+  }
+}
+
+:where(:root[data-skin="grove"][data-theme="dark"]) {
+  --bg: #08110f;
+  --surface: #101b18;
+  --surface-2: #16241f;
+  --border: #24362f;
+  --text: #e2eae3;
+  --muted: #92a597;
+  --heading: #eef5e8;
+  --accent: #8fd0a2;
+  --accent-fill: #3a7a52;
+  --danger: #f07a6c;
+  --ok: #6fd29a;
+  --warn: #e6b45c;
+  --gold: #d6c27e;
+  --gold-ink: #e2d196;
+  --focus: #a6e2b8;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+  --paper: rgba(10, 20, 17, 0.76);
+  --paper-strong: rgba(13, 24, 20, 0.92);
+  --vine: linear-gradient(90deg, transparent, #4e7d55 20%, #8fd0a2 50%, #5c8f7a 80%, transparent);
+  --page-art: image-set(url("page.avif") type("image/avif"), url("page.webp") type("image/webp"));
+  --page-veil: linear-gradient(rgba(5, 11, 10, 0.6), rgba(5, 11, 10, 0.4) 40%, rgba(5, 11, 10, 0.55));
+  --card-backdrop: image-set(url("ui/card.avif") type("image/avif"), url("ui/card.webp") type("image/webp"));
+  --empty-shadow: rgba(140, 220, 160, 0.18);
+  --card-shadow: inset 0 1px 0 rgba(200, 255, 210, 0.05), 0 10px 30px rgba(0, 0, 0, 0.45);
+  --card-hover-shadow: inset 0 1px 0 rgba(200, 255, 210, 0.07), 0 0 26px color-mix(in srgb, var(--pc) 22%, transparent);
+  --dialog-shadow: 0 30px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(140, 210, 160, 0.06);
+  --sunbeam: rgba(200, 230, 255, 0.08);
+
+  .tier-s { --tier: #e8c25e; --tier-ink: #f8e3a8; }
+  .tier-a { --tier: #6fd29a; --tier-ink: #cdf3db; }
+  .tier-b { --tier: #6cb6f0; --tier-ink: #d0e8fb; }
+  .tier-c { --tier: #b7c86a; --tier-ink: #e6eec4; }
+  .tier-d { --tier: #98a39a; --tier-ink: #d4dbd5; }
+
+  /* Dark: each spirit stands in a moonlit glade that fades into the card. */
+  .card-art { border-radius: 0; box-shadow: none; }
+  .provider { padding-top: 196px; }
+  .provider .card-art { inset: 0 0 auto 0; height: 250px; mask-image: linear-gradient(to bottom, #000 58%, transparent 100%); }
+  .provider .card-art::before { background-size: cover; background-position: center 12%; }
+  .provider .vendor { color: #f1f6ec; }
+  .session-card { padding-left: 152px; }
+  .session-card .card-art, .session-card .card-aura {
+    inset: 0 auto 0 0; width: 168px; border-radius: 0;
+    mask-image: linear-gradient(to right, #000 62%, transparent 100%);
+  }
+  .session-card .card-art::before, .session-card .card-art::after { background-size: 168px auto; background-position: center top; }
+  .session-card .level-badge { left: 10px; bottom: 10px; }
+
+  .meter-bar, .stat-bar { background: #07100d; box-shadow: inset 0 0 0 1px rgba(140, 210, 160, 0.14); }
+  .meter-fill { background: linear-gradient(90deg, #2a78b8, #72c8f0); box-shadow: 0 0 8px rgba(114, 200, 240, 0.45); }
+  .meter + .meter .meter-fill { background: linear-gradient(90deg, #2f8a4e, #8fdc6e); box-shadow: 0 0 8px rgba(143, 220, 110, 0.45); }
+  .meter.low .meter-fill { background: linear-gradient(90deg, #b67a14, #f0c060); box-shadow: 0 0 8px rgba(240, 192, 96, 0.4); }
+  .meter.empty .meter-fill { background: linear-gradient(90deg, #b8443a, #f07a6c); box-shadow: 0 0 8px rgba(240, 122, 108, 0.4); }
+  .stat-fill { background: linear-gradient(90deg, color-mix(in srgb, var(--tier) 50%, #000), var(--tier)); box-shadow: 0 0 8px color-mix(in srgb, var(--tier) 40%, transparent); }
+  .stat-tier { background: linear-gradient(color-mix(in srgb, var(--tier) 28%, #101b18), #07100d); border-color: color-mix(in srgb, var(--tier) 60%, #000); }
+
+  .status-pill { background: rgba(4, 10, 8, 0.6); }
+  .status-pill.active { background: color-mix(in srgb, var(--ok) 10%, rgba(4, 10, 8, 0.6)); box-shadow: 0 0 10px rgba(111, 210, 154, 0.2); }
+  .status-pill.exited { background: color-mix(in srgb, var(--danger) 8%, rgba(4, 10, 8, 0.6)); }
+  .provider .tier { color: color-mix(in srgb, var(--pc) 65%, #fff); background: rgba(4, 10, 8, 0.6); }
+  .badge { background: rgba(4, 10, 8, 0.5); }
+
+  .btn { background: linear-gradient(rgba(28, 44, 37, 0.92), rgba(14, 24, 20, 0.92)); border-color: #2e4a3d; box-shadow: inset 0 1px 0 rgba(200, 255, 210, 0.06); }
+  .btn:hover { border-color: #5f9a72; box-shadow: inset 0 1px 0 rgba(200, 255, 210, 0.08), 0 0 12px rgba(95, 154, 114, 0.3); }
+  .btn.primary { background: linear-gradient(135deg, #4a8c5e, #2a6340); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 18px rgba(80, 160, 105, 0.35); }
+  .btn.danger { color: #ff9a8e; }
+  .btn.danger:hover { border-color: #b8443a; box-shadow: 0 0 12px rgba(240, 122, 108, 0.3); }
+  .cwd input, .auth input, .history-tools input[type="search"], .history-form input, .github-fields input, .github-fields select { border-color: #2e4a3d; background: rgba(4, 10, 8, 0.7); }
+
+  .models::backdrop, .news-panel::backdrop { background: rgba(2, 6, 5, 0.66); }
+  .terminal-panel { border-color: #2e4a3d; box-shadow: 0 0 0 1px rgba(140, 210, 160, 0.06), 0 30px 80px rgba(0, 0, 0, 0.7); }
+  .news-link { color: #eef5e8; }
+  a.news-link:visited { color: var(--muted); }
+
+  @media (max-width: 640px) {
+    .session-card { padding-left: 118px; }
+    .session-card .card-art, .session-card .card-aura { width: 132px; }
+    .session-card .card-art::before, .session-card .card-art::after { background-size: 132px auto; }
+  }
+}
+
+@keyframes grove-bloom { from { opacity: 0; transform: translateY(16px) scale(0.97); filter: blur(4px); } 60% { opacity: 1; filter: blur(0); } }
+@keyframes grove-drift { from { opacity: 0; transform: translateX(-12px); filter: blur(3px); } }
+@keyframes grove-level-up {
+  35% { transform: scale(1.3) rotate(-6deg); filter: brightness(1.35) drop-shadow(0 0 10px #b9f0a0); }
+  70% { transform: scale(0.96) rotate(2deg); }
+}
+@keyframes grove-sprout { from { opacity: 0; transform: translateY(10px) scale(0.2); } 60% { opacity: 1; transform: translateY(-2px) scale(1.12); } }
+@keyframes grove-ripple { from { opacity: 0.9; transform: scale(0.35); } to { opacity: 0; transform: scale(1.15); } }
+@keyframes grove-fireflies { to { transform: translateY(-110px); } }
+@keyframes grove-float { from { transform: translateY(0); } to { transform: translateY(-7px); } }

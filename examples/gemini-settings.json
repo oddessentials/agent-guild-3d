@@ -1,0 +1,61 @@
+{
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "invoke_agent",
+        "hooks": [
+          {
+            "type": "command",
+            "name": "Agent Guild agent start",
+            "command": "agent-guild-report --hook"
+          }
+        ]
+      }
+    ],
+    "AfterTool": [
+      {
+        "matcher": "invoke_agent",
+        "hooks": [
+          {
+            "type": "command",
+            "name": "Agent Guild agent stop",
+            "command": "agent-guild-report --hook"
+          }
+        ]
+      }
+    ],
+    "BeforeAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "name": "Agent Guild turn start",
+            "command": "agent-guild-report --hook"
+          }
+        ]
+      }
+    ],
+    "AfterAgent": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "name": "Agent Guild turn end",
+            "command": "agent-guild-report --hook"
+          }
+        ]
+      }
+    ],
+    "BeforeModel": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "name": "Agent Guild model",
+            "command": "agent-guild-report --hook"
+          }
+        ]
+      }
+    ]
+  }
+}

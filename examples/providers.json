@@ -1,0 +1,27 @@
+{
+  "providers": [
+    {
+      "id": "anthropic",
+      "args": ["--model", "opus"]
+    },
+    {
+      "id": "xai",
+      "command": "grok",
+      "win32": { "command": "C:\\Tools\\grok\\grok.exe" }
+    },
+    {
+      "id": "aider",
+      "vendor": "Aider",
+      "tool": "Aider",
+      "command": "aider",
+      "args": ["--model", "sonnet"],
+      "env": { "AIDER_DARK_MODE": "true" },
+      "color": "#14B8A6",
+      "monogram": "Ai"
+    },
+    {
+      "id": "shell",
+      "enabled": false
+    }
+  ]
+}

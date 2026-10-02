@@ -1,0 +1,43 @@
+{
+  "_style": "Premium dark fantasy game asset illustration, painterly high detail, strong glow and rim light, single object isolated and centered with generous empty margin, on a flat pure pitch-black background, no ground, no shadow on floor, no text, no letters, no border, no frame.",
+
+  "familiar-flame": {"seed": 601, "w": 1024, "h": 1024,
+    "prompt": "A small cute baby dragon familiar made of living embers and molten orange fire, glowing golden eyes, tiny bat wings, curled tail, hovering playfully, orange flame wisps."},
+  "familiar-leaf": {"seed": 602, "w": 1024, "h": 1024,
+    "prompt": "A small cute baby dragon familiar made of glowing emerald-green leaves and vines, glowing bright green eyes, leafy wings, curled tail, hovering playfully, green light motes."},
+  "familiar-night": {"seed": 603, "w": 1024, "h": 1024,
+    "prompt": "A small cute baby dragon imp familiar made of glowing violet crystal and shadow, small curved horns, glowing lavender eyes, tiny bat wings, curled tail, hovering playfully, violet sparkles."},
+  "familiar-aether": {"seed": 604, "w": 1024, "h": 1024,
+    "prompt": "A small cute round spirit familiar made of glowing translucent sky-blue starlight and nebula, tiny wings, big glowing eyes, curled wispy tail, hovering playfully, blue star sparkles."},
+
+  "level-medallion": {"seed": 701, "w": 1024, "h": 1024,
+    "prompt": "A round ornate antique bronze and gold medallion badge viewed straight-on, eight-pointed compass star spikes around the rim, engraved filigree ring, the center is a large perfectly smooth empty dark bronze disc with nothing on it, symmetrical."},
+  "padlock": {"seed": 702, "w": 1024, "h": 1024,
+    "prompt": "A heavy old wrought-iron padlock with rivets and a keyhole, slightly rusted dark metal, viewed straight-on, symmetrical."},
+  "chain": {"seed": 703, "w": 1536, "h": 512,
+    "prompt": "A single straight horizontal length of heavy dark rusted iron chain links spanning the full width, viewed from the side, evenly lit."},
+  "cage-bars": {"seed": 704, "w": 1024, "h": 1344,
+    "prompt": "A flat front view of a black wrought-iron prison gate: seven evenly spaced vertical iron bars with spear-point tips at the top and two horizontal riveted crossbars, filling the whole image edge to edge, metal only, nothing behind it."},
+  "gem-vitality": {"seed": 705, "w": 1024, "h": 1024,
+    "prompt": "A faceted glowing emerald-green crystal gem set in a small ornate dark iron and gold mount, viewed straight-on, symmetrical, bright inner glow."},
+  "gem-mana": {"seed": 706, "w": 1024, "h": 1024,
+    "prompt": "A faceted glowing sapphire-blue crystal gem set in a small ornate dark iron and gold mount, viewed straight-on, symmetrical, bright inner glow."},
+  "guild-crest": {"seed": 707, "w": 1024, "h": 1024,
+    "prompt": "A heraldic guild crest emblem: an ornate dark iron and gold shield with an upward-pointing glowing indigo-violet chevron in the center, small wings and filigree around the shield, viewed straight-on, symmetrical."},
+
+  "page-background": {"seed": 801, "w": 1920, "h": 1088, "style": false,
+    "prompt": "Extremely dark, low-contrast background texture for a website: an ancient dark stone guild hall wall in deep shadow, faint barely visible golden rune etchings, subtle warm ember glow at the bottom edge, a few tiny drifting embers, almost black overall (#0f1115), even and calm, no focal object, no text, no people."},
+  "page-background-light": {"seed": 11, "workflow": "qwen-edit", "input": "backgrounds/page.png",
+    "prompt": "Turn this into its bright daytime counterpart: the same textured surface as pale warm ivory vellum lit by soft morning light, remove every rune and etching completely, the glow at the bottom becomes a soft warm golden sunlight glow, almost white overall, even and calm, very low contrast, no objects, no text, no symbols."},
+
+  "frame-corner": {"seed": 901, "w": 1024, "h": 1024,
+    "style": "Premium dark fantasy game asset illustration, painterly high detail, polished antique gold metal with warm rim light, isolated on a flat pure pitch-black background, no text, no letters, no gems.",
+    "prompt": "An ornate antique gold filigree corner ornament for the top-left corner of a trading card frame: two thin straight gold rails meeting at a right angle in the top-left, decorated at the corner with a small elegant scrollwork flourish and a tiny leaf motif, the rails fading out along the top edge and the left edge, the rest of the image empty black."},
+
+  "frame-ornate": {"seed": 911, "w": 1024, "h": 1344,
+    "style": "Premium dark fantasy game asset illustration, painterly high detail, polished antique gold metal with warm rim light, isolated on a flat pure pitch-black background, no text, no letters, no gems.",
+    "prompt": "An ornate antique gold trading card frame border viewed straight-on, a thin elegant rectangular gold frame with engraved filigree along all four edges and decorative scrollwork corners, symmetrical, filling the whole image edge to edge, the entire inside of the frame is empty flat pitch-black."},
+
+  "empty-state": {"seed": 1002, "w": 1024, "h": 1024,
+    "prompt": "A small round dark oak guild table seen in three-quarter view from slightly above, an unrolled parchment map held flat by a brass compass, a feather quill standing in an inkwell, a single lit candle with a warm glow, and one empty carved high-backed wooden chair pulled up to it, quiet and waiting."}
+}

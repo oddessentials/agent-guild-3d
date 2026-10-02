@@ -1,0 +1,86 @@
+<!doctype html>
+<!-- The README banner, drawn from the shipped art. capture.mjs renders it. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agent Guild banner</title>
+<style>
+  @font-face { font-family: "Cinzel"; src: url("../../web/fonts/cinzel.woff2") format("woff2"); font-weight: 400 900; }
+  html, body { margin: 0; width: 1600px; height: 560px; overflow: hidden; background: #0b0a0f; }
+  body {
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 90% at 72% 110%, rgb(217 119 87 / 0.22), transparent 70%),
+      radial-gradient(ellipse 50% 80% at 18% 30%, rgb(91 64 208 / 0.28), transparent 70%),
+      url("../../web/art/page.webp") center / cover;
+    font-family: "Cinzel", "Palatino Linotype", Georgia, serif;
+  }
+  body::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    box-shadow: inset 0 0 160px 40px rgb(0 0 0 / 0.75);
+  }
+
+  .title {
+    position: absolute; left: 96px; top: 0; bottom: 0; width: 640px;
+    display: flex; flex-direction: column; justify-content: center; z-index: 2;
+  }
+  .crest { width: 132px; height: 132px; margin: 0 0 14px -6px; filter: drop-shadow(0 0 22px rgb(150 110 255 / 0.55)); }
+  h1 {
+    margin: 0; font-size: 80px; font-weight: 800; letter-spacing: 0.02em; line-height: 1;
+    background: linear-gradient(180deg, #fbe9bd 0%, #e2b867 55%, #a97b35 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 3px 10px rgb(0 0 0 / 0.8));
+  }
+  .rule { width: 420px; height: 2px; margin: 22px 0 20px; background: linear-gradient(90deg, #e8c47c, rgb(232 196 124 / 0.25) 60%, transparent); }
+  .motto { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: 0.06em; color: #f1dcae; text-shadow: 0 2px 8px #000; }
+  .tagline {
+    margin: 10px 0 0; font: 400 25px/1.35 "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: #d9d3e6; text-shadow: 0 2px 8px #000;
+  }
+
+  .party { position: absolute; right: 40px; bottom: -36px; height: 600px; width: 860px; }
+  .hero {
+    position: absolute; bottom: 0; width: 360px; height: 480px;
+    background: var(--art) center top / cover;
+    -webkit-mask-image: radial-gradient(ellipse 56% 62% at 50% 42%, #000 52%, transparent 78%);
+    mask-image: radial-gradient(ellipse 56% 62% at 50% 42%, #000 52%, transparent 78%);
+    filter: drop-shadow(0 0 30px var(--pc));
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 50% 40% at 50% 85%, color-mix(in srgb, var(--pc) 35%, transparent), transparent 70%);
+    mix-blend-mode: screen;
+  }
+  .anthropic { --art: url("../../web/art/characters/anthropic/working.webp"); --pc: #d97757; left: 230px; height: 560px; width: 400px; z-index: 3; }
+  .openai { --art: url("../../web/art/characters/openai/working.webp"); --pc: #1fd08f; left: 70px; bottom: 34px; z-index: 2; }
+  .google { --art: url("../../web/art/characters/google/working.webp"); --pc: #5b9cff; left: 430px; bottom: 34px; z-index: 2; }
+  .xai { --art: url("../../web/art/characters/xai/working.webp"); --pc: #38d6e8; left: -40px; bottom: 70px; width: 280px; height: 380px; z-index: 1; opacity: 0.9; }
+  .shell { --art: url("../../web/art/characters/shell/working.webp"); --pc: #a67cf6; left: 600px; bottom: 70px; width: 280px; height: 380px; z-index: 1; opacity: 0.9; }
+</style>
+</head>
+<body>
+  <div class="title">
+    <img class="crest" src="../../concept-art/default-art-design-v1/ui/guild-crest.png" alt="">
+    <h1>Agent Guild</h1>
+    <div class="rule"></div>
+    <p class="motto">Work hard, play hard.</p>
+    <p class="tagline">An agentic UI that enhances instead of hinders.</p>
+  </div>
+  <div class="party" aria-hidden="true">
+    <div class="hero xai"></div>
+    <div class="hero shell"></div>
+    <div class="hero openai"></div>
+    <div class="hero google"></div>
+    <div class="hero anthropic"></div>
+  </div>
+  <!-- Images in CSS are not in document.images; preload them so capture.mjs waits for them. -->
+  <div hidden>
+    <img src="../../web/art/characters/anthropic/working.webp" alt="">
+    <img src="../../web/art/characters/openai/working.webp" alt="">
+    <img src="../../web/art/characters/google/working.webp" alt="">
+    <img src="../../web/art/characters/xai/working.webp" alt="">
+    <img src="../../web/art/characters/shell/working.webp" alt="">
+    <img src="../../web/art/page.webp" alt="">
+  </div>
+</body>
+</html>

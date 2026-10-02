@@ -1,0 +1,70 @@
+{
+  "_style": "Premium stylized 3D render in a serene, gentle storybook style, cute handcrafted collectible figurine look, soft velvety moss, smooth river stone and delicate leaf physically based materials with subtle subsurface glow, soft diffuse key light with a warm rim light, single subject isolated and centered with a generous empty margin, on a pure flat black background, no floor, no shadow, no text, no letters, no logos, no border.",
+  "familiars/flame": {
+    "seed": 611,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round ember sprite, a soft glowing ball of warm orange and gold firelight with two happy dark bead eyes, a little curling flame tuft on top like a sprout, cradled in a small curled autumn maple leaf, tiny drifting sparks, floating calmly."
+  },
+  "familiars/leaf": {
+    "seed": 612,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round sprout spirit, a plump soft ball of velvety bright green moss with two happy dark bead eyes and rosy cheeks, two fresh young leaves sprouting from the top of its head, a few tiny glowing green motes, floating calmly."
+  },
+  "familiars/night": {
+    "seed": 613,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round fluffy night moth spirit, soft lavender and deep violet fur, big feathery antennae, small rounded wings with glowing pale moon-shaped spots, two big gentle dark eyes, a few tiny violet sparkles, hovering calmly."
+  },
+  "familiars/aether": {
+    "seed": 614,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny cute round dandelion seed spirit, a soft glowing sphere of fine white and pale sky-blue dandelion fluff with two happy dark bead eyes peeking out of the fluff, a few loose seeds drifting away on the breeze, floating calmly."
+  },
+  "ui/empty-state": {
+    "seed": 811,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "qwen-image",
+    "prompt": "A tiny serene zen garden on a small round island of mossy stone: a small weathered stone lantern covered in soft green moss glowing softly warm from inside, a tiny raked white sand garden with neat concentric ripples around one smooth dark stone, a small clear pond with one pink lotus, a little bonsai maple tree with red leaves, two tiny fireflies, peaceful and quiet."
+  },
+  "backgrounds/card": {
+    "seed": 921,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "hidream-o1",
+    "style": "",
+    "prompt": "A soft out-of-focus background of a calm mossy forest glade at night, deep teal and blue-green shadows, soft round bokeh of pale glowing fireflies and moonlight through leaves, a faint mist, velvety moss-covered ground at the bottom, dark and gentle overall, painterly cinematic depth of field, no animals, no people, no text."
+  },
+  "backgrounds/card-light": {
+    "seed": 922,
+    "w": 1024,
+    "h": 1024,
+    "workflow": "hidream-o1",
+    "style": "",
+    "prompt": "A soft out-of-focus background of a calm sunlit mossy forest glade in the early morning, soft sage green, pale jade and warm cream tones, gentle round bokeh of sunlight through leaves, a faint morning mist, velvety moss-covered stones at the bottom, airy and gentle overall, painterly cinematic depth of field, no animals, no people, no text."
+  },
+  "backgrounds/page": {
+    "seed": 931,
+    "w": 1920,
+    "h": 1088,
+    "workflow": "hidream-o1",
+    "style": "",
+    "prompt": "A serene moonlit Japanese moss garden beside a still mountain lake at night, cinematic wide panorama, a deep indigo night sky full of soft stars and a faint milky way, a full moon low on the right behind thin silver clouds, distant misty layered mountains and a soft waterfall on the left, the lake reflecting the moon, soft glowing fireflies over velvety moss-covered stones and a small stone lantern glowing warmly at the lower left, Japanese maples and pines framing the edges, very dark and calm overall with the centre mostly quiet night sky and water, painterly stylized 3D, no people, no text."
+  },
+  "backgrounds/page-light": {
+    "seed": 932,
+    "w": 1920,
+    "h": 1088,
+    "workflow": "hidream-o1",
+    "style": "",
+    "prompt": "A serene misty mountain valley at dawn seen from a Japanese moss garden, cinematic wide panorama, a soft pastel sky in pale peach, cream and powder blue with gentle wispy clouds, layered misty blue-green mountains in the distance, a tall graceful waterfall falling into a calm clear pond on the left, terraced emerald moss gardens with smooth river stones, cherry and maple trees softly framing the edges, airy, high-key and very light overall with the centre mostly soft pale sky and mist, painterly stylized 3D, no people, no text."
+  }
+}

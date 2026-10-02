@@ -1,0 +1,52 @@
+{
+  "name": "@oddessentials/agent-guild",
+  "version": "0.0.0-development",
+  "description": "Launch and watch AI coding-assistant terminal sessions from one local web page. A bundled session manager owns the terminals so the page can close and reconnect.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oddessentials/agent-guild.git"
+  },
+  "homepage": "https://github.com/oddessentials/agent-guild#readme",
+  "bugs": {
+    "url": "https://github.com/oddessentials/agent-guild/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "agent-guild": "bin/agent-guild.mjs",
+    "agent-guild-report": "bin/agent-guild-report.mjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "web/",
+    "config/",
+    "examples/"
+  ],
+  "scripts": {
+    "start": "node bin/agent-guild.mjs open",
+    "manager": "node bin/agent-guild.mjs start",
+    "stop": "node bin/agent-guild.mjs stop",
+    "status": "node bin/agent-guild.mjs status",
+    "test": "node --test --test-concurrency=1"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.11.0",
+    "@xterm/addon-serialize": "^0.14.0",
+    "@xterm/addon-web-links": "^0.12.0",
+    "@xterm/headless": "^6.0.0",
+    "@xterm/xterm": "^6.0.0",
+    "node-pty": "^1.2.0-beta.15",
+    "ws": "^8.22.0"
+  },
+  "bundleDependencies": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "allowScripts": {
+    "node-pty@1.2.0-beta.15": true
+  }
+}

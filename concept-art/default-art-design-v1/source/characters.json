@@ -1,0 +1,23 @@
+{
+  "_style": "Dark fantasy trading card character art, painterly high-detail digital illustration, high-contrast chiaroscuro, strong colored rim light, three-quarter figure from knees up, centered, face clearly visible in the upper third, isolated on a pure pitch-black background with a faint smoky vignette, no walls, no scenery, no text, no letters, no logos, no border, no frame.",
+
+  "anthropic-idle-a": {"seed": 101, "w": 1024, "h": 1344,
+    "prompt": "A wise hooded sorcerer in flowing burnt-orange robes embroidered with fine gold runes, trimmed brown beard, serious calm expression, standing composed with both palms open at his sides, a few dim amber runes floating quietly around him, patient waiting pose.",
+    "style": "Dark fantasy trading card character art, painterly high-detail digital illustration, high-contrast chiaroscuro, strong colored rim light, three-quarter figure from knees up, centered, face clearly visible in the upper third, isolated on a pure pitch-black background with a faint smoky vignette and a few drifting embers, no walls, no scenery, no text, no letters, no logos, no border, no frame."},
+  "openai-idle-a": {"seed": 201, "w": 1024, "h": 1344,
+    "prompt": "A towering knight in dark obsidian plate armor with thin glowing emerald-green seams, a narrow glowing emerald visor slit in a sleek closed helm, heavy dark tattered cloak, standing at rest with arms crossed over his chest, the hilt of a greatsword over his shoulder, faint green motes drifting."},
+  "openai-idle-b": {"seed": 202, "w": 1024, "h": 1344,
+    "prompt": "A towering knight in dark obsidian plate armor with thin glowing emerald-green seams, a narrow glowing emerald visor slit in a sleek closed helm, heavy dark tattered cloak, standing at rest with arms crossed over his chest, the hilt of a greatsword over his shoulder, faint green motes drifting."},
+  "google-idle-a": {"seed": 301, "w": 1024, "h": 1344,
+    "prompt": "Twin celestial star-mages, a young man and a young woman standing close shoulder to shoulder, both in deep sapphire-blue hooded robes with fine silver star embroidery, a single glowing blue-white four-pointed star floating between them at chest height, calm serene expressions, faint constellations in the air."},
+  "google-idle-b": {"seed": 302, "w": 1024, "h": 1344,
+    "prompt": "Twin celestial star-mages, a young man and a young woman standing close shoulder to shoulder, both in deep sapphire-blue hooded robes with fine silver star embroidery, a single glowing blue-white four-pointed star floating between them at chest height, calm serene expressions, faint constellations in the air."},
+  "xai-idle-a": {"seed": 401, "w": 1024, "h": 1344,
+    "prompt": "A young rogue with messy jet-black hair and piercing glowing electric-cyan eyes, long black armored leather coat with high collar and thin glowing cyan-blue circuit-like sigils, confident relaxed stance with hands in his coat pockets, faint cyan sparks drifting."},
+  "xai-idle-b": {"seed": 402, "w": 1024, "h": 1344,
+    "prompt": "A young rogue with messy jet-black hair and piercing glowing electric-cyan eyes, long black armored leather coat with high collar and thin glowing cyan-blue circuit-like sigils, confident relaxed stance with hands in his coat pockets, faint cyan sparks drifting."},
+  "shell-idle-a": {"seed": 501, "w": 1024, "h": 1344,
+    "prompt": "A spectral hooded wraith made of translucent violet smoke and light, no visible face, only a glowing bright violet angle-bracket chevron symbol burning inside the dark empty hood, flowing robe dissolving into wispy violet tendrils below, calm and hovering, faint violet particles."},
+  "shell-idle-b": {"seed": 502, "w": 1024, "h": 1344,
+    "prompt": "A spectral hooded wraith made of translucent violet smoke and light, no visible face, only a glowing bright violet angle-bracket chevron symbol burning inside the dark empty hood, flowing robe dissolving into wispy violet tendrils below, calm and hovering, faint violet particles."}
+}
